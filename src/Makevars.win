@@ -1,0 +1,25 @@
+
+VIC_PATH = ./vic
+VIC_RUN = $(VIC_PATH)/vic_run
+VIC_DRVSHR = $(VIC_PATH)/drivers/shared_all
+
+HDRS = -I "driver_R" -I "$(VIC_RUN)/include" -I "$(VIC_DRVSHR)/include" -I "."
+
+GIT_VERSION = None
+USER = None
+HOSTNAME = None
+LOG_LVL = 20
+
+PKG_CPPFLAGS = $(HDRS) \
+           -DLOG_LVL=$(LOG_LVL) \
+					 -DGIT_VERSION=\"$(GIT_VERSION)\" \
+					 -DUSERNAME=\"$(USER)\" \
+					 -DHOSTNAME=\"$(HOSTNAME)\"
+
+SOURCES_VIC_RUN = $(wildcard ${VIC_RUN}/src/*.c)
+SOURCES_VIC_DRVSHR = $(wildcard ${VIC_DRVSHR}/src/*.c)
+
+
+SOURCES_CPP = $(wildcard ./*.cpp)
+SOURCES_C = $(wildcard driver_R/*.c) $(SOURCES_VIC_RUN) $(SOURCES_VIC_DRVSHR)
+OBJECTS = $(SOURCES_CPP:.cpp=.o) $(SOURCES_C:.c=.o)

@@ -1,0 +1,458 @@
+
+get_forclen <- function() {
+  st <- c(
+    getOption('VIC_global_params')[['start_year']],
+    getOption('VIC_global_params')[['start_month']],
+    getOption('VIC_global_params')[['start_day']]
+  )
+  ed <- c(
+    getOption('VIC_global_params')[['end_year']],
+    getOption('VIC_global_params')[['end_month']],
+    getOption('VIC_global_params')[['end_day']]
+  )
+  t1 <- as.double(strptime(sprintf("%04d-%02d-%02d", st[1],st[2],st[3]),
+                           '%Y-%m-%d', tz = 'UTC'))
+  t2 <- as.double(strptime(sprintf("%04d-%02d-%02d", ed[1],ed[2],ed[3]),
+                           '%Y-%m-%d', tz = 'UTC'))
+  ((t2 - t1)/86400 + 1) *
+    getOption('VIC_global_params')[['snow_step_per_day']]
+}
+
+get_out_nrec <- function(st, ed, freq, aggstep = 1) {
+  nrec <- -1
+  if(freq == "year") {
+    nrec <- ed[1] - st[1] + 1
+  }else if(freq == "month"){
+    nrec <- (ed[1] - st[1])*12 + ed[2]-st[2] + 1
+  }else if(freq == "step"){
+    return(-1)
+  }else if(freq %in% c("date", "end")) {
+    return(1)
+  } else {
+    t1 <- as.double(strptime(sprintf("%04d-%02d-%02d", st[1],st[2],st[3]),
+                             '%Y-%m-%d', tz = 'UTC')) + st[4]
+    t2 <- as.double(strptime(sprintf("%04d-%02d-%02d", ed[1],ed[2],ed[3]),
+                             '%Y-%m-%d', tz = 'UTC')) + 86400
+    td <- t2 - t1
+    if(freq == "second") {
+      nrec <- td
+    }else if(freq == "minute") {
+      nrec <- td / 60
+    }else if(freq == "hour") {
+      nrec <- td / 3600
+    }else if(freq == "day") {
+      nrec <- td / 86400
+    }
+  }
+  nrec = nrec %/% aggstep
+  return(nrec)
+}
+
+deal_output_info <- function(output) {
+  st <- c(
+    getOption('VIC_global_params')[['start_year']],
+    getOption('VIC_global_params')[['start_month']],
+    getOption('VIC_global_params')[['start_day']],
+    getOption('VIC_global_params')[['start_sec']]
+  )
+  ed <- c(
+    getOption('VIC_global_params')[['end_year']],
+    getOption('VIC_global_params')[['end_month']],
+    getOption('VIC_global_params')[['end_day']]
+  )
+  for(i in 1:length(output)) {
+    if(is.null(output[[i]]$aggtypes))
+      output[[i]]$aggtypes <- -1
+
+    if(is.null(output[[i]]$aggpar) & output[[i]]$timescale == 'date')
+      stop('"aggpar" must be set to date type when "timescale" is set to "date".')
+
+    if(is.null(output[[i]]$aggpar))
+      output[[i]]$aggpar <- 1
+    output[[i]]$nrow <- get_out_nrec(st, ed, output[[i]]$timescale,
+                                     output[[i]]$aggpar)
+
+  }
+  return(output)
+}
+
+
+#' VIC model run for each gridcells
+
+#' @description
+#' Run the VIC model for each gridcells by providing several meteorological
+#' and vegetation (optional) forcing data and land surface parameters (soil,
+#' vegetation, snowband (optional), lake (optional)).
+#'
+#' @param forcing meteorological forcing data. Must be a list of numeral matrix
+#' with the name of one of "PREC", "TEMP", "SW", "LW", "WIND", "VP" and "PRESS".
+#' See details.
+#'
+#' @param soil soil parameter data. Must be a data frame or numeral matrix.
+#'
+#' @param veg vegetation parameters. Must be a list containing several matrixs.
+#' See details.
+#'
+#' @param output_info A list containing output contents and timescales
+#' (optional). See details.
+#'
+#' @param veglib Vegetation library parameters (optional). Would using the
+#' library of the NLDAS and GLDAS when not provided.
+#'
+#' @param snowband A data frame or numeral matrix containing snow band
+#' parameters (optional). See details.
+#'
+#' @param lake A dataframe or numeric matrix containing lake parameters
+#' (optional).
+#'
+#' @param forcing_veg Vegetation forcing data (optional). See details.
+#'
+#' @param veg_force_types Type names of vegetation forcing data. Must be
+#' provided when using vegetation forcing data.
+#'
+#' @param parall Determined if run the VIC parallely. If it is TRUE,
+#' \code{registerDoParallel()} in package \code{doParallel} is
+#' need to be used before run the VIC.
+#'
+#' @details
+#' Parameter \code{forcing} must be a list containing several numeral matrixs
+#' that containing forcing data. Name of each matrix (similar to key in
+#' dictionary in Python) must be the specific type names including
+#' "PREC", "TEMP", "SW", "LW", "WIND", "VP" and "PRESS". All of those types
+#' are necessary to run the VIC model. Each row of the
+#' matrixs is corresponding to a time step while each column of the matrixs
+#' is corresponding to a gridcell, which other must be the same as those
+#' in soil parameter.
+#'
+#' --------------------------------------------------------------------------------
+#'
+#' Parameter \code{soil} must be a numeric data frame or matrix that containing
+#' soil parameters. The style of this is the same as the soil parameter file
+#' of the classic VIC, that is, each row restores the parameter of a cell
+#' while each column restores one type of parameter. Detail see
+#' http://vic.readthedocs.io/en/master/Documentation/Drivers/Classic/SoilParam/
+#' in the official VIC documentation webside.
+#'
+#' --------------------------------------------------------------------------------
+#'
+#' Parameter \code{veg} must be a list containing several numeral matrixs that
+#' Those matrixs restore the vegetation parameters that are corresponding
+#' to each gridcells, and those order must be the same as the soil parameters.
+#' Each row of the matrix restores the parameters of a vegetation type
+#' while each column restores a type of parameter.
+#' Each row should be like:
+#' \preformatted{
+#' c(veg_type, area_fract, rootzone_1_depth,
+#'   rootzone_1_fract, rootzone_2_depth, rootzone_2_fract, ...)
+#' }
+#' which is similar to the veg param file
+#' of the classic VIC. If the source of LAI, fcanopy or albedo is set
+#' to veg params, it must be follow by a sequence of param value for each
+#' month in a year. The rows of \code{veg} would be similar as:
+#' \preformatted{
+#' c(veg_type, area_fract, rootzone_1_depth,
+#'   rootzone_1_fract, rootzone_2_depth, rootzone_2_fract,
+#'   LAI_Jan, LAI_Feb, LAI_Mar, ..., LAI_Dec,
+#'   fcan_Jan, fcan_Feb, fcan_Mar, ..., fcan_Dec,
+#'   albedo_Jan, albedo_Feb, albedo_Mar, ..., albedo_Dec)
+#' }
+#'
+#' --------------------------------------------------------------------------------
+#'
+#' Parameter \code{output_info} is used to determine the output variables,
+#' output timescale (monthly, daily, sub-daily, or each 6 days, etc.),
+#' aggregration of data (mean, sum, max, min, start or end) when output
+#' timescale is larger than input timescale. It should be a list like that:
+#' \preformatted{
+#' output_info <- list(timescale = 'timescale', aggpar = aggpar,
+#'                     outvars = c('OUT_TYPE_1', 'OUT_TYPE_2', 'OUT_TYPE_3', ...),
+#'                     aggtypes = c('aggtype_1', 'aggtype_2', 'aggtype_3'))
+#' }
+#'
+#' Names of the items in the list (e.g. timescale, outvars) must be those
+#' specified as follows:
+#' \itemize{
+#' \item \code{timescale}:  {Output timescale, including 'never', 'step', 'second',
+#' 'minute', 'hour', 'day', 'month', 'year', 'date', and 'end'. 'never'
+#' means never output, 'step' means use the input timestep, 'date'
+#' means output at a specific date, and 'end' means output at the last
+#' timestep.}
+#' \item \code{aggpar}:  {If 'timescale' is set to those except 'never', 'date' and
+#' 'end', it determined the intervals of the timescale to pass before output.
+#' If 'timescale' is 'day' and 'aggpar' is 6, that means data outputs per 6
+#' days.
+#' If 'timescale' is 'date', it should be a \code{Date} type and it could be
+#' generated use \code{as.Date('YYYY-mm-dd')}.}
+#' \item \code{outvars}:  {A sequence of names of output data types. The available
+#' data types please see the VIC official documentation website at
+#' \url{http://vic.readthedocs.io/en/master/Documentation/OutputVarList/}.}
+#' \item \code{aggtypes}:  {Optional. A sequence of string determine how to aggregrate
+#' the output data when output timescale is larger than input timescale,
+#' Including 'avg' (average), 'begin', 'end', 'max', 'min', 'sum', 'default'.
+#' Each string in it must be corresponding to those in 'outvars'.
+#' If input timescale is daily, while output timescale is monthly, and
+#' aggtype is 'begin', it would output the data of the first day of each
+#' month.}
+#' }
+#'
+#' If multiple output timescales are used, the outputs could be divided
+#' into several lists and take them into a list as input, e.g.:
+#' \preformatted{
+#' out_info <- list(
+#'   wb = list(timescale = 'hour', aggpar = 6,
+#'             outvars = c('OUT_RUNOFF', 'OUT_BASEFLOW', 'OUT_SOIL_MOIST'),
+#'             aggtypes = c('sum', 'sum', 'end')),
+#'   eb = list(timescale = 'day', aggpar = 1,
+#'             outvars = c('OUT_SWE', 'OUT_SOIL_TEMP'),
+#'             aggtypes = c('avg', 'min'))
+#' )
+#' }
+#'
+#' --------------------------------------------------------------------------------
+#'
+#' Parameter \code{veglib} is a matrix or a numeric dataframe of a vegetation
+#' parameter library. Each row determines a type of vegetation while each
+#' column determines a parameter, including ovetstory (or not), LAI for each
+#' month in a year, etc. If not provided, it would use the default vegetation
+#' library of the NASA Landsurface Data Assimination System (LDAS) (Rodell
+#' et al., 2004), which contains 11 types of vegetation with the vegetation
+#' classification of UMD.
+#'
+#' --------------------------------------------------------------------------------
+#'
+#' Parameter \code{snowband} is a matrix or a numeric dataframe determines
+#' the elevation band information for each gridcells. Each row determines
+#' the band information of a gridcell while a column determines the values
+#' of the elevation band parameters.
+#' This devide a single gridcell into several parts with dfferent elevation
+#' to run individually, to further consider the sub-gridcell heterogeneity
+#' of elevation and the resulted heterogeneity air temperature in a gridcell
+#' with higher variation of elevation. The information of elevation bands
+#' includes area fraction, mean elevation and fraction of precipitation
+#' falled to the gridcell of each elevation band of the gridcell.
+#' The order of the rows must be coresponding to the gridcells determined
+#' in the soil parameters. Each row should be like:
+#' \preformatted{
+#' c(GRID_ID, AFRAC_1, AFRAC_2, ..., AFRAC_n, ELEV_1, ELEV_2, ..., ELEV_n,
+#'   PFRAC_1, PFRAC_2, ..., PFRAC_n)
+#' }
+#' \code{GRID_ID} is the id of the grid; AFRAC_i means area fraction of
+#' each elevation band; ELEV_i is their mean elevation; PFRAC_i is there
+#' precipitation fraction. n is the number of elevation bands for each
+#' gridcell and is determined by \code{'nbands'} in the global options.
+#' This can be set used \code{veg_param('nbands', n)}.
+#'
+#' @references
+#' Liang, X., D. P. Lettenmaier, E. F. Wood, and S. J. Burges (1994), A
+#' simple hydrologically based model of land surface water and energy
+#' fluxes for general circulation models, J. Geophys. Res., 99(D7),
+#' 14415-14428, doi:10.1029/94JD00483.
+#'
+#' Liang, X., and Z. Xie, 2001: A new surface runoff parameterization
+#' with subgrid-scale soil heterogeneity for land surface models,
+#' Advances in Water Resources, 24(9-10), 1173-1193.
+#'
+#' Rodell, M., P.R. Houser, U. Jambor, J. Gottschalck, K. Mitchell,
+#' C.-J. Meng, K. Arsenault, B. Cosgrove, J. Radakovich, M. Bosilovich,
+#' J.K. Entin, J.P. Walker, D. Lohmann, and D. Toll, The Global Land Data
+#' Assimilation System, Bull. Amer. Meteor. Soc., 85(3), 381-394, 2004
+#'
+#' @examples
+#' data(STEHE)
+#'
+#' forcing <- STEHE$forcing
+#' soil <- STEHE$soil
+#' veg <- STEHE$veg
+#'
+#' vic_param('start_year', 1949)
+#' vic_param('start_month', 1)
+#' vic_param('start_day', 1)
+#' vic_param('end_year', 1949)
+#' vic_param('end_month', 1)
+#' vic_param('end_day', 10)
+#' vic_param('step_per_day', 24)
+#' vic_param('snow_step_per_day', 24)
+#' vic_param('runoff_step_per_day', 24)
+#'
+#' outputs <- vic(forcing, soil, veg)
+#' names(outputs)
+#' outputs$time_table
+#'
+#' # Using snowbands
+#' vic_param('nbands', 5)
+#' band <- STEHE$snowbands
+#' outputs <- vic(forcing, soil, veg, snowband = band)
+#' outputs$time_table
+#'
+#' # User defind outputs
+#' out_info <- list(
+#'   wb = list(timescale = 'hour', aggpar = 6,
+#'             outvars = c('OUT_RUNOFF', 'OUT_BASEFLOW', 'OUT_SOIL_MOIST'),
+#'             aggtypes = c('sum', 'sum', 'end')),
+#'   eb = list(timescale = 'day', aggpar = 1,
+#'             outvars = c('OUT_SWE', 'OUT_SOIL_TEMP'),
+#'             aggtypes = c('avg', 'min'))
+#' )
+#' outputs <- vic(forcing, soil, veg, snowband = band, output_info = out_info)
+#' names(outputs)
+#'
+#' # Parallelization
+#' library(doParallel)
+#' registerDoParallel(cores=4)
+#' outputs <- vic(forcing, soil, veg, snowband = band, parall = T)
+#' stopImplicitCluster()
+#' outputs$time_table
+#'
+#' @return A list containing output tables and time table.
+#'
+#' @export
+vic <- function(forcing, soil, veg,
+                output_info = NULL,
+                veglib = NULL, snowband = NULL, lake = NULL,
+                forcing_veg = NULL,
+                veg_force_types = c('albedo', 'LAI', 'fcanopy'),
+                parall = FALSE) {
+
+  tp1 <- proc.time()
+
+  if(!is.list(output_info) || length(output_info) == 0) {
+    output_info <- list(
+      fluxes = list(timescale = 'day', aggpar = 1,
+                    outvars = c('OUT_PREC', 'OUT_EVAP', 'OUT_RUNOFF',
+                                'OUT_BASEFLOW', 'OUT_WDEW', 'OUT_SOIL_MOIST')
+                    ),
+      snow = list(timescale = 'day', aggpar = 1,
+                    outvars = c('OUT_SWE', 'OUT_SNOW_DEPTH', 'OUT_SNOWF',
+                                'OUT_SNOW_MELT', 'OUT_SNOW_SURF_TEMP',
+                                'OUT_SNOW_PACK_TEMP')
+                    )
+    )
+  }
+  if(!is.list(output_info[[1]]))
+    output_info <- list(output = output_info)
+
+  output_info <- deal_output_info(output_info)
+  n_outputs <- length(output_info)
+  out_names <- names(output_info)
+
+  if(is.null(veglib)) {
+    veglib <- veglib_LDAS
+  } else {
+    if(is.data.frame(veglib)) {
+      veglib <- veglib[, !sapply(veglib, is.character)]
+      veglib <- as.matrix(veglib)
+    }
+  }
+
+  if(is.vector(soil))
+    soil <- t(soil)
+  soil <- as.matrix(soil)
+  ncell <- nrow(soil)
+  cellid <- soil[, 2]
+
+  # Check length of forcing data.
+  minfl <- get_forclen()
+  for(ft in names(forcing)) {
+    fl <- nrow(forcing[[ft]])
+    if(is.null(nrow(forcing[[ft]]))) fl <- length(forcing[[ft]])
+    if(fl < minfl) {
+      stop(sprintf('Length of forcing data "%s" (%d) is too short for model require (%d).',
+                   ft, fl, minfl))
+    }
+
+    fc <- ncol(forcing[[ft]])
+    if(is.null(fc) && ncell > 1 || fc < ncell)
+      stop(sprintf('Columns of forcing data "%s" (%d) are too few for model require. It should no less than number of gridcells (%d).', ft, fc, ncell))
+  }
+
+
+  if(!is.list(veg))
+    veg <- list(veg)
+
+  if(is.vector(lake)) {
+    lake <- t(lake)
+  } else if(!is.null(lake)) {
+    lake <- as.matrix(lake)
+  }
+
+  if(is.vector(snowband)) {
+    snowband <- t(snowband)
+  } else if(!is.null(snowband)) {
+    snowband <- as.matrix(snowband)
+  }
+
+  forc_types <- c("PREC", "TEMP", "SW", "LW", "PRESS", "VP", "WIND")
+  # The order should not be change.
+
+  if(ncell == 1) {
+    forcing <- data.frame(forcing[forc_types])
+  }
+
+  globalopt <- getOption('VIC_global_params')
+  `%dof%` <- ifelse(parall, foreach::`%dopar%`, foreach::`%do%`)
+
+  tp2 <- proc.time()
+
+  tmp_out <- foreach::foreach(i=1:ncell) %dof% {
+    if(is.null(forcing_veg)) {
+      forc_veg <- matrix()
+    } else {
+      forc_veg <- forcing_veg[[i]]
+      attr(forc_veg, "types") <- veg_force_types
+    }
+
+    if(is.null(lake)) {
+      ilake <- -1
+    } else {
+      ilake <- lake[i, ]
+    }
+
+    if(is.null(snowband)) {
+      band <- -1
+    } else {
+      band <- snowband[i, ]
+    }
+
+    forc <- sapply(forc_types, function(ft)forcing[[ft]][, i])
+
+    iout <- vic_run_cell(globalopt,
+                         forc, soil[i, ], band, veg[[i]],
+                         ilake, forc_veg, veglib, output_info)
+
+    iout
+  }
+
+  tp3 <- proc.time()
+
+  # Run time in C++
+  cpp_time <- rbind(
+    c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 1]])), 0),
+    c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 2]])), 0),
+    c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 3]])), 0))
+
+  out <- list()
+  for(i in 1:n_outputs) {
+    out_header <- attr(tmp_out[[1]][[i]], 'header')
+    out_time <- attr(tmp_out[[1]][[i]], 'time')
+    iout <- lapply(1:length(out_header), function(h) {
+      itype <- sapply(1:ncell, function(g) tmp_out[[g]][[i]][, h])
+      rownames(itype) <- out_time
+      colnames(itype) <- cellid
+      itype
+    })
+    names(iout) <- out_header
+    out[[out_names[i]]] <- iout
+  }
+
+  tp4 <- proc.time()
+
+  time_table <- rbind(tp2-tp1, tp3-tp2, tp4-tp3, tp4-tp1)[,1:3]
+  time_table <- rbind(time_table, cpp_time)
+  rownames(time_table) <- c('init_time', 'run_time', 'final_time', 'total_time',
+                         'init_time(cpp)', 'run_time(cpp)', 'final_time(cpp)')
+  out[['time_table']] <- round(time_table, 4)
+  class(out) <- 'vic_output'
+  out
+}
+
+
