@@ -1,5 +1,8 @@
 # VICmodel
 
+[![Travis-CI Build Status](https://travis-ci.org/Sibada/VICmodel.svg?branch=master)](https://travis-ci.org/Sibada/VICmodel)
+ * Turn on travis for your repo at https://travis-ci.org/Sibada/VICmodel
+
 ## Overview
 VICmodel is an R implementation of the Variable Infiltration Capacity (VIC) macroscale distributed hydrologic model (Liang et al., 1994) originally developed by Xu Liang at the University of Washington ([UW](http://www.washington.edu/)), USA, and currently the model is maintained by the Computational Hydrology group ([UW Hydro](http://uw-hydro.github.io/)) in the [Department of Civil and Environmental Engineering](https://www.ce.washington.edu/) at UW. This R package is developed by Ruida Zhong at the Center for Water Resources and Environment, [Sun Yat-sen University](http://www.sysu.edu.cn/) (SYSU). This package is built to for the more convinient use for the R users and other users or researchers using windows platform.
 
