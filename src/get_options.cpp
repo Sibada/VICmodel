@@ -147,7 +147,7 @@ void get_options(List vic_options) {
     else if (opnames[i] == "resolution") {
       global_param.resolution = as<double>(vic_options[opname]);
     }
-    else if (opnames[i] == "AERO_RESIST_CANSNOW") {
+    else if (opnames[i] == "AERO_resist_cansnow") {
       intopt = as<int>(vic_options[opname]);
       if (intopt == 0) {
         options.AERO_RESIST_CANSNOW = AR_406;
@@ -162,19 +162,19 @@ void get_options(List vic_options) {
         options.AERO_RESIST_CANSNOW = AR_410;
       }
       else {
-        log_err("Unknown AERO_RESIST_CANSNOW option.");
+        log_err("Unknown AERO_resist_cansnow option.");
       }
     }
-    else if (opnames[i] == "GRND_FLUX_TYPE") {
-      stropt = as<String>(vic_options[opname]);
-      if (stropt == "GF_406") {
+    else if (opnames[i] == "grnd_flux_type") {
+      intopt = as<int>(vic_options[opname]);
+      if (stropt == 0) {
         options.GRND_FLUX_TYPE = GF_406;
       }
-      else if (stropt == "GF_410") {
+      else if (stropt == 1) {
         options.GRND_FLUX_TYPE = GF_410;
       }
       else {
-        log_err("Unknown GRND_FLUX_TYPE option.");
+        log_err("Unknown grnd_flux_type option.");
       }
     }
     else if (opnames[i] == "spatial_frost") {
@@ -186,38 +186,38 @@ void get_options(List vic_options) {
         options.Nfrost = intopt;
       }
     }
-    else if (opnames[i] == "SPATIAL_SNOW") {
+    else if (opnames[i] == "spatial_snow") {
       options.SPATIAL_SNOW = as<bool>(vic_options[opname]);
     }
-    else if (opnames[i] == "TFALLBACK") {
+    else if (opnames[i] == "Tfallback") {
       options.TFALLBACK = as<bool>(vic_options[opname]);
     }
-    else if (opnames[i] == "SHARE_LAYER_MOIST") {
+    else if (opnames[i] == "share_layer_moist") {
       options.SHARE_LAYER_MOIST = as<bool>(vic_options[opname]);
     }
-    else if (opnames[i] == "CANOPY_LAYERS") {
+    else if (opnames[i] == "canopy_layers") {
       options.Ncanopy = as<unsigned int>(vic_options[opname]);
     }
-    else if (opnames[i] == "CARBON") {
+    else if (opnames[i] == "carbon") {
       options.CARBON = as<bool>(vic_options[opname]);
     }
-    else if (opnames[i] == "RC_MODE") {
-      stropt = as<String>(vic_options[opname]);
-      if (stropt == "RC_PHOTO") {
+    else if (opnames[i] == "RC_mode") {
+      intopt = as<int>(vic_options[opname]);
+      if (intopt == 0) {
         options.RC_MODE = RC_PHOTO;
       }
-      else if(stropt == "RC_JARVIS") {
+      else if(intopt == 1) {
         options.RC_MODE = RC_JARVIS;
       }
       else {
-        log_err("Unknown RC_MODE option.");
+        log_err("Unknown RC_mode option.");
       }
     }
 
     /* ************************************************************************
      * forcing parameters
      * ***********************************************************************/
-    else if(opnames[i] == "GRID_DECIMAL") {
+    else if(opnames[i] == "grid_decmal") {
       options.GRID_DECIMAL = as<unsigned int>(vic_options[opname]);
     }
     else if(opnames[i] == "wind_h") {
@@ -729,7 +729,7 @@ void get_options(List vic_options) {
     }
     if (options.IMPLICIT || options.EXP_TRANS) {
       log_err("To run the model with QUICK_FLUX=TRUE, you cannot "
-                "have IMPLICIT=TRUE or EXP_TRANS=TRUE.");
+                "have IMPLICIT=TRUE or exp_trans=TRUE.");
     }
   }
   else {
@@ -746,7 +746,7 @@ void get_options(List vic_options) {
                 "and QUICK_FLUX=FALSE");
     }
     if (options.EXP_TRANS) {
-      log_err("EXP_TRANS must be set to FALSE when QUICK_SOLVE=TRUE "
+      log_err("exp_trans must be set to FALSE when QUICK_SOLVE=TRUE "
                 "and QUICK_FLUX=FALSE");
     }
   }

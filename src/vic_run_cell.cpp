@@ -175,7 +175,6 @@ List vic_run_cell(List vic_options, NumericMatrix forcing,
 }
 
 
-
   /***R
 
   data(STEHE)

@@ -1,4 +1,10 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong on Jun 23th, 2018:
+ * The stdout/stderr are commented and  `fprintf` are changed to `Rprintf`
+ * for the correct output to R terminal.
+ *
  * @section DESCRIPTION
  *
  * This routine checks the command line for valid program options.
@@ -44,6 +50,7 @@ cmd_proc(int    argc,
          char **argv,
          char  *globalfilename)
 {
+    /*
     char GLOBAL_SET;
     int  optchar;
 
@@ -57,22 +64,18 @@ cmd_proc(int    argc,
     while ((optchar = getopt(argc, argv, optstring)) != EOF) {
         switch ((char)optchar) {
         case 'v':
-            /** Version information **/
             display_current_settings(DISP_VERSION);
             exit(EXIT_SUCCESS);
             break;
         case 'o':
-            /** Compile-time options information **/
             display_current_settings(DISP_COMPILE_TIME);
             exit(EXIT_SUCCESS);
             break;
         case 'g':
-            /** Global Parameters File **/
             strncpy(globalfilename, optarg, MAXSTRING);
             GLOBAL_SET = true;
             break;
         default:
-            /** Print Usage if Invalid Command Line Arguments **/
             print_usage(argv[0]);
             exit(1);
             break;
@@ -85,6 +88,7 @@ cmd_proc(int    argc,
         print_usage(argv[0]);
         exit(EXIT_FAILURE);
     }
+     */
 }
 
 /******************************************************************************
@@ -93,21 +97,21 @@ cmd_proc(int    argc,
 void
 print_usage(char *executable)
 {
-    fprintf(stdout,
+    Rprintf(
             "Usage: %s [-v | -o | -g <global_parameter_file>]\n", executable);
-    fprintf(stdout, "  v: display version information\n");
-    fprintf(stdout,
+    Rprintf("  v: display version information\n");
+    Rprintf(
             "  o: display compile-time options settings"
             " (set in .h files)\n");
-    fprintf(stdout,
+    Rprintf(
             "  g: read model parameters from <global_parameter_file>.\n");
-    fprintf(stdout,
+    Rprintf(
             "       <global_parameter_file> is a file that contains all"
             " needed model\n");
-    fprintf(stdout,
+    Rprintf(
             "       parameters as well as model option flags, and the names"
             " and\n");
-    fprintf(stdout, "       locations of all other files.\n");
+    Rprintf("       locations of all other files.\n");
 }
 
 /******************************************************************************
@@ -116,13 +120,13 @@ print_usage(char *executable)
 void
 print_version(char *driver)
 {
-    fprintf(stdout, "VIC Driver  : %s\n", driver);
-    fprintf(stdout, "VIC Version : %s\n", VERSION);
-    fprintf(stdout, "VIC Git Tag : %s\n", GIT_VERSION);
-    fprintf(stdout, "Compiled    : by %s on %s (%s) %s %s\n",
+    Rprintf("VIC Driver  : %s\n", driver);
+    Rprintf("VIC Version : %s\n", VERSION);
+    Rprintf("VIC Git Tag : %s\n", GIT_VERSION);
+    Rprintf("Compiled    : by %s on %s (%s) %s %s\n",
             USERNAME, HOSTNAME, PLATFORM, BUILD_DATE, BUILD_TIME);
-    fprintf(stdout, "Compiler    : %s\n", COMPILER);
-    fprintf(stdout, " version    : %s\n", COMPILER_VERSION);
+    Rprintf("Compiler    : %s\n", COMPILER);
+    Rprintf(" version    : %s\n", COMPILER_VERSION);
 
     print_license();
 }
@@ -133,22 +137,22 @@ print_version(char *driver)
 void
 print_license()
 {
-    fprintf(stdout,
+    Rprintf(
             "\n  Variable Infiltration Capacity (VIC) macroscale hydrologic\n");
-    fprintf(stdout,
+    Rprintf(
             "  model version %s, Copyright (C) 2016 Computational\n",
             SHORT_VERSION);
-    fprintf(stdout,
+    Rprintf(
             "  Hydrology Group, Dept. of Civil and Environmental Engineering,\n");
-    fprintf(stdout,
+    Rprintf(
             "  University of Washington.  VIC comes with ABSOLUTELY NO\n");
-    fprintf(stdout,
+    Rprintf(
             "  WARRANTY. This is free software, you may redistribute it\n");
-    fprintf(stdout,
+    Rprintf(
             "  under certain conditions; see LICENSE.txt for details.\n\n");
 
-    fprintf(stdout,
+    Rprintf(
             "  Report Bugs and Issues to : https://github.com/UW-Hydro/VIC/issues\n");
-    fprintf(stdout,
+    Rprintf(
             "  VIC Users Email Listserve : vic_users@u.washington.edu \n\n");
 }

@@ -89,8 +89,12 @@ void Rf_warning(const char *, ...);
 
 // Debug Level
 #if LOG_LVL < 10
+#define debug(M, ...) Rprintf("[DEBUG] %s:%d: " M "\n", __FILE__, \
+                              __LINE__, ## __VA_ARGS__);\
+/*
 #define debug(M, ...) fprintf(LOG_DEST, "[DEBUG] %s:%d: " M "\n", __FILE__, \
-                              __LINE__, ## __VA_ARGS__); fflush(LOG_DEST);
+                              __LINE__, ## __VA_ARGS__); fflush(LOG_DEST);\
+ */
 #else
 #define debug(M, ...)
 

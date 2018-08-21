@@ -1,33 +1,35 @@
 Package: VICmodel
 Type: Package
-Title: An R implementation of the VIC hydrologic Model.
-Version: 0.1.1
+Title: An R implementation of the Variable Infiltration Capacity (VIC) Model
+Version: 0.1.0
 Authors@R: person("Ruida", "Zhong", email = "zrd2017@163.com", role = c("aut", "cre"))
-Maintainer: Ruida Zhong <zrd2017@163.com>
-Description: This is an R implementation of the UW Variable Infiltration Capacity (VIC) 
-    model (Liang et al., 1994). VIC is a macroscale hydrologic model that solves full 
-    water and energy balances, originally developed by Xu Liang at the University of 
-    Washington (UW). 
-    Development and maintenance of the current official version of the VIC model at 
-    present is led by the UW Hydro | Computational Hydrology group in the Department 
-    of Civil and Environmental Engineering at the University of Washington. 
-    VIC is a research model and in its various forms it has been applied to most of 
-    the major river basins around the world, as well as globally. If you make use of 
-    this model, please acknowledge the appropriate references listed in the help page 
-    of this package or on the references page 
-    (http://vic.readthedocs.io/en/master/Documentation/References/) 
-    of the VIC official documentation website. These should include Liang et al., 1994 
-    plus any references relevant to the features you are using, which are cited in 
-    the feature descriptions on the Model Overview page.
-    Reference: 
-    Liang, X., D. P. Lettenmaier, E. F. Wood, and S. J. Burges (1994), A simple 
-    hydrologically based model of land surface water and energy fluxes for general 
-    circulation models, J. Geophys. Res., 99(D7), 14415-14428, doi:10.1029/94JD00483.
+Description: This is an R implementation of the UW Variable Infiltration
+    Capacity (VIC) model. VIC is a macroscale hydrologic model that solves full
+    water and energy balances, originally developed by Xu Liang at the University
+    of Washington (UW). Development and maintenance of the current official version
+    of the VIC model at present is led by the UW Hydro | Computational Hydrology
+    group in the Department of Civil and Environmental Engineering at UW. VIC is
+    a research model and in its various forms it has been applied to most of the
+    major river basins around the world, as well as globally. If you make use of
+    this model, please acknowledge the appropriate references listed in the help
+    page of this package or on the references page (http://vic.readthedocs.io/en/
+    master/Documentation/References/) of the VIC official documentation website.
+    These should include Liang et al., 1994 plus any references relevant to the
+    features you are using Reference: Liang, X., D. P. Lettenmaier, E. F. Wood, and
+    S. J. Burges (1994), A simple hydrologically based model of land surface water
+    and energy fluxes for general circulation models, J. Geophys. Res., 99(D7),
+    14415-14428, doi:10.1029/94JD00483.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.0.0)
 Imports:
+    stats,
+    utils,
     Rcpp (>= 0.12.0),
     foreach
+Suggests:
+    doParallel
 LinkingTo: Rcpp
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

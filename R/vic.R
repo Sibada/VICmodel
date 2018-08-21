@@ -11,9 +11,9 @@ get_forclen <- function() {
     getOption('VIC_global_params')[['end_day']]
   )
   t1 <- as.double(strptime(sprintf("%04d-%02d-%02d", st[1],st[2],st[3]),
-                           '%Y-%m-%d', tz = 'UTC'))
+                           '%Y-%m-%d'))
   t2 <- as.double(strptime(sprintf("%04d-%02d-%02d", ed[1],ed[2],ed[3]),
-                           '%Y-%m-%d', tz = 'UTC'))
+                           '%Y-%m-%d'))
   ((t2 - t1)/86400 + 1) *
     getOption('VIC_global_params')[['snow_step_per_day']]
 }
@@ -30,9 +30,9 @@ get_out_nrec <- function(st, ed, freq, aggstep = 1) {
     return(1)
   } else {
     t1 <- as.double(strptime(sprintf("%04d-%02d-%02d", st[1],st[2],st[3]),
-                             '%Y-%m-%d', tz = 'UTC')) + st[4]
+                             '%Y-%m-%d') + st[4])
     t2 <- as.double(strptime(sprintf("%04d-%02d-%02d", ed[1],ed[2],ed[3]),
-                             '%Y-%m-%d', tz = 'UTC')) + 86400
+                             '%Y-%m-%d') + 86400)
     td <- t2 - t1
     if(freq == "second") {
       nrec <- td
@@ -111,8 +111,12 @@ deal_output_info <- function(output) {
 #' provided when using vegetation forcing data.
 #'
 #' @param parall Determined if run the VIC parallely. If it is TRUE,
-#' \code{registerDoParallel()} in package \code{doParallel} is
+#' \code{registerDoParallel()} in package \pkg{doParallel} is
 #' need to be used before run the VIC.
+#'
+#' @param x Return of the `vic()` function for `print()`.
+#'
+#' @param ... Other arguments to print.
 #'
 #' @details
 #' Parameter \code{forcing} must be a list containing several numeral matrixs
@@ -124,16 +128,16 @@ deal_output_info <- function(output) {
 #' is corresponding to a gridcell, which other must be the same as those
 #' in soil parameter.
 #'
-#' --------------------------------------------------------------------------------
+#' \preformatted{-------------------------------------------------------------}
 #'
 #' Parameter \code{soil} must be a numeric data frame or matrix that containing
 #' soil parameters. The style of this is the same as the soil parameter file
 #' of the classic VIC, that is, each row restores the parameter of a cell
 #' while each column restores one type of parameter. Detail see
-#' http://vic.readthedocs.io/en/master/Documentation/Drivers/Classic/SoilParam/
+#' \url{http://vic.readthedocs.io/en/master/Documentation/Drivers/Classic/SoilParam/}
 #' in the official VIC documentation webside.
 #'
-#' --------------------------------------------------------------------------------
+#' \preformatted{-------------------------------------------------------------}
 #'
 #' Parameter \code{veg} must be a list containing several numeral matrixs that
 #' Those matrixs restore the vegetation parameters that are corresponding
@@ -157,7 +161,7 @@ deal_output_info <- function(output) {
 #'   albedo_Jan, albedo_Feb, albedo_Mar, ..., albedo_Dec)
 #' }
 #'
-#' --------------------------------------------------------------------------------
+#' \preformatted{-------------------------------------------------------------}
 #'
 #' Parameter \code{output_info} is used to determine the output variables,
 #' output timescale (monthly, daily, sub-daily, or each 6 days, etc.),
@@ -169,30 +173,34 @@ deal_output_info <- function(output) {
 #'                     aggtypes = c('aggtype_1', 'aggtype_2', 'aggtype_3'))
 #' }
 #'
+#' And a output table (a list containing the output variables in matrix form)
+#' named "output" would be returned. You can obtain the variables use code like
+#' \code{res$output$OUT_...}.
 #' Names of the items in the list (e.g. timescale, outvars) must be those
 #' specified as follows:
-#' \itemize{
-#' \item \code{timescale}:  {Output timescale, including 'never', 'step', 'second',
+#' \tabular{ll}{
+#' \code{timescale} \tab Output timescale, including 'never', 'step', 'second',
 #' 'minute', 'hour', 'day', 'month', 'year', 'date', and 'end'. 'never'
 #' means never output, 'step' means use the input timestep, 'date'
 #' means output at a specific date, and 'end' means output at the last
-#' timestep.}
-#' \item \code{aggpar}:  {If 'timescale' is set to those except 'never', 'date' and
+#' timestep.\cr
+#' \code{aggpar} \tab If 'timescale' is set to those except 'never', 'date' and
 #' 'end', it determined the intervals of the timescale to pass before output.
 #' If 'timescale' is 'day' and 'aggpar' is 6, that means data outputs per 6
 #' days.
 #' If 'timescale' is 'date', it should be a \code{Date} type and it could be
-#' generated use \code{as.Date('YYYY-mm-dd')}.}
-#' \item \code{outvars}:  {A sequence of names of output data types. The available
+#' generated use \code{as.Date('YYYY-mm-dd')}.\cr
+#' \code{outvars} \tab A sequence of names of output data types. The available
 #' data types please see the VIC official documentation website at
-#' \url{http://vic.readthedocs.io/en/master/Documentation/OutputVarList/}.}
-#' \item \code{aggtypes}:  {Optional. A sequence of string determine how to aggregrate
-#' the output data when output timescale is larger than input timescale,
-#' Including 'avg' (average), 'begin', 'end', 'max', 'min', 'sum', 'default'.
+#' \url{http://vic.readthedocs.io/en/master/Documentation/OutputVarList/}.\cr
+#' \code{aggtypes} \tab Optional. A sequence of string determine how to
+#' aggregrate the output data when output timescale is larger than input
+#' timescale, Including 'avg' (average), 'begin', 'end', 'max', 'min', 'sum',
+#' 'default'.
 #' Each string in it must be corresponding to those in 'outvars'.
 #' If input timescale is daily, while output timescale is monthly, and
 #' aggtype is 'begin', it would output the data of the first day of each
-#' month.}
+#' month.
 #' }
 #'
 #' If multiple output timescales are used, the outputs could be divided
@@ -208,7 +216,9 @@ deal_output_info <- function(output) {
 #' )
 #' }
 #'
-#' --------------------------------------------------------------------------------
+#' This would return two output tables named "wb" and "eb" respectively.
+#'
+#' \preformatted{-------------------------------------------------------------}
 #'
 #' Parameter \code{veglib} is a matrix or a numeric dataframe of a vegetation
 #' parameter library. Each row determines a type of vegetation while each
@@ -218,7 +228,7 @@ deal_output_info <- function(output) {
 #' et al., 2004), which contains 11 types of vegetation with the vegetation
 #' classification of UMD.
 #'
-#' --------------------------------------------------------------------------------
+#' \preformatted{-------------------------------------------------------------}
 #'
 #' Parameter \code{snowband} is a matrix or a numeric dataframe determines
 #' the elevation band information for each gridcells. Each row determines
@@ -241,6 +251,53 @@ deal_output_info <- function(output) {
 #' precipitation fraction. n is the number of elevation bands for each
 #' gridcell and is determined by \code{'nbands'} in the global options.
 #' This can be set used \code{veg_param('nbands', n)}.
+#'
+#' \preformatted{-------------------------------------------------------------}
+#'
+#' Parameter \code{forcing_veg} must be a list containing several 3D numeral
+#' arrays that containing vegetation forcing data such as LAI, albedo and
+#' fraction of canopy. Different to parameter \code{forcing}, each 3D array
+#' in the list is the vegetation forcing data for a single gridcell, and the
+#' order of the 3D arrays must be corresponding to the order of the gridcells
+#' determined in the soil parameter.
+#'
+#' The dimensions of a 3D array are represents:
+#'
+#' [timestep, vegetation tile, forcing type].
+#'
+#' That is, the first dimension determines the data of the timesteps, the
+#' second dimension determines the data for the different vegetation tiles
+#' in this gridcell that determined by the vegetation parameters, while
+#' the third dimension determined the data of different forcing data type
+#' (LAI, albedo or fcanopy), which should be corresponding to the parameter
+#' \code{veg_force_types}.
+#'
+#'
+#' @return A list containing output tables, time table and model settings.
+#'
+#' VIC in R supports multiple "output tables" with different output timescales.
+#' For example,
+#' you can put soil moisture and soil temperature in a table with monthly
+#' timescale and put runoff, baseflow in another table with daily timescale.
+#'
+#' You can use \code{print()} to print the summary of the returns.
+#' The returns includes:
+#' \tabular{ll}{
+#'   \code{output} \tab One or several "output tables" and each of them containing
+#' several output variables, which is determined by the \code{output_info}
+#' parameter. The name of the "table" would also be which \code{output_info}
+#' determined. Each "table" containing several numerial matrices corresponding
+#' to the output variables. Each row of the matrices is output data for a
+#' time step while each column is output data for a gridcell. \cr
+#'
+#'   \code{timetable} \tab Containing initiation time, model running time and
+#' final (orgnizate outputs) time of the VIC model running.\cr
+#'
+#'   \code{global_options} \tab Global options setted for this model run. \cr
+#'   \code{output_infos} \tab Output settings determined by the \code{output_info}
+#' parameter.
+#' }
+#'
 #'
 #' @references
 #' Liang, X., D. P. Lettenmaier, E. F. Wood, and S. J. Burges (1994), A
@@ -275,16 +332,12 @@ deal_output_info <- function(output) {
 #' vic_param('runoff_step_per_day', 24)
 #'
 #' outputs <- vic(forcing, soil, veg)
-#' names(outputs)
-#' outputs$time_table
+#' print(outputs)
 #'
-#' # Using snowbands
+#' # Use user defind outputs and snowband parameters
 #' vic_param('nbands', 5)
 #' band <- STEHE$snowbands
-#' outputs <- vic(forcing, soil, veg, snowband = band)
-#' outputs$time_table
 #'
-#' # User defind outputs
 #' out_info <- list(
 #'   wb = list(timescale = 'hour', aggpar = 6,
 #'             outvars = c('OUT_RUNOFF', 'OUT_BASEFLOW', 'OUT_SOIL_MOIST'),
@@ -293,17 +346,18 @@ deal_output_info <- function(output) {
 #'             outvars = c('OUT_SWE', 'OUT_SOIL_TEMP'),
 #'             aggtypes = c('avg', 'min'))
 #' )
-#' outputs <- vic(forcing, soil, veg, snowband = band, output_info = out_info)
-#' names(outputs)
 #'
-#' # Parallelization
+#' outputs <- vic(forcing, soil, veg, snowband = band, output_info = out_info)
+#' print(outputs)
+#'
+#' # Example of parallelization
+#' \dontrun{
 #' library(doParallel)
 #' registerDoParallel(cores=4)
-#' outputs <- vic(forcing, soil, veg, snowband = band, parall = T)
+#' outputs <- vic(forcing, soil, veg, snowband = band, parall = TRUE)
 #' stopImplicitCluster()
-#' outputs$time_table
-#'
-#' @return A list containing output tables and time table.
+#' print(outputs)
+#' }
 #'
 #' @export
 vic <- function(forcing, soil, veg,
@@ -424,11 +478,11 @@ vic <- function(forcing, soil, veg,
 
   tp3 <- proc.time()
 
-  # Run time in C++
-  cpp_time <- rbind(
-    c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 1]])), 0),
-    c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 2]])), 0),
-    c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 3]])), 0))
+  # Run time in C
+  #cpp_time <- rbind(
+  #  c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 1]])), 0),
+  #  c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 2]])), 0),
+  #  c(rowSums(sapply(tmp_out, function(x)x[[n_outputs + 3]])), 0))
 
   out <- list()
   for(i in 1:n_outputs) {
@@ -447,12 +501,83 @@ vic <- function(forcing, soil, veg,
   tp4 <- proc.time()
 
   time_table <- rbind(tp2-tp1, tp3-tp2, tp4-tp3, tp4-tp1)[,1:3]
-  time_table <- rbind(time_table, cpp_time)
-  rownames(time_table) <- c('init_time', 'run_time', 'final_time', 'total_time',
-                         'init_time(cpp)', 'run_time(cpp)', 'final_time(cpp)')
-  out[['time_table']] <- round(time_table, 4)
+  #time_table <- rbind(time_table, cpp_time)
+  #rownames(time_table) <- c('init_time', 'run_time', 'final_time', 'total_time',
+  #                       'init_time(cpp)', 'run_time(cpp)', 'final_time(cpp)')
+  rownames(time_table) <- c('init_time', 'run_time', 'final_time', 'total_time')
+  out[['timetable']] <- round(time_table, 4)
+  out[['global_options']] <- globalopt
+  out[['output_info']] <- output_info
   class(out) <- 'vic_output'
   out
 }
 
+#' @rdname vic
+#' @export
+print.vic_output <- function(x, ...) {
+  sedate <- x$global_options[
+    c('start_year', 'start_month', 'start_day','end_year', 'end_month', 'end_day')]
+  stpd <- x$global_options$step_per_day
+  stpd <- ifelse(stpd == 1, "daily", sprintf("%d hourly", 24/stpd))
+  cat(sprintf("VIC model run from %d-%d-%d to %d-%d-%d at %s timescale.\n",
+                sedate[[1]], sedate[[2]], sedate[[3]],
+                sedate[[4]], sedate[[5]], sedate[[6]], stpd))
 
+  c1 <- "Number of soil layers: "
+  c2 <- x$global_options$nlayers
+
+  c1 <- c(c1, "Number of elevation bands: ")
+  c2 <- c(c2, x$global_options$nbands)
+
+  c1 <- c(c1, "Use lake mode: ")
+  c2 <- c(c2, c("False", "True")[x$global_options$lakes+1])
+
+  c1 <- c(c1, "Use full energy balance mode: ")
+  c2 <- c(c2, c("False", "True")[x$global_options$full_energy+1])
+
+  c1 <- c(c1, "Use frozen soil mode: ")
+  c2 <- c(c2, c("False", "True")[x$global_options$frozen_soil+1])
+
+  c1 <- c(c1, "Baseflow mode: ")
+  c2 <- c(c2, c("ARNO", "NIJSSEN2001")[x$global_options$baseflow+1])
+
+  c1 <- c(c1, "Snow density mode: ")
+  c2 <- c(c2, c("SNTHRM", "DENS_BRAS")[x$global_options$snow_den+1])
+
+  pt <- cbind(c1, c2)
+  dimnames(pt) <- list(rep("", dim(pt)[1]), rep("", dim(pt)[2]))
+  print(pt, quote=F)
+
+  cat("----------------------------------------------------------------\n")
+
+  otables <- names(x)
+  otables <- otables[1:(length(otables)-3)]
+
+  cat(sprintf("%d output tables: ", length(otables)))
+  cat(paste(sprintf("\"%s\"", otables), collapse = ", "))
+  cat(".\n")
+
+  for(i in 1:length(otables)) {
+    name <- otables[i]
+    if(x$output_info[[name]]$timescale == "never") {
+      ots <- "is set to never output"
+    } else if(x$output_info[[name]]$timescale == "step") {
+      ots <- paste("outputs", stpd)
+    } else if(x$output_info[[name]]$timescale == "date") {
+      ots <- format(x$output_info[[name]]$aggpar, "outputs at %Y-%m-%d")
+    } else {
+      ots <- sprintf("outputs per %d %s",
+                     x$output_info[[name]]$aggpar,
+                     x$output_info[[name]]$timescale)
+    }
+
+    cat(sprintf("- Table \"%s\":\n", name))
+    cat(sprintf("  %s, has %d output variables:\n    ",
+                    ots, length(x[[name]])))
+    cat(sprintf("%s\n", paste(names(x[[name]]), collapse = ", ")))
+
+  }
+  cat("\n----------------------------------------------------------------\n")
+  cat("Time table:\n")
+  print(x$timetable, quote=F)
+}

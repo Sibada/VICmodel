@@ -1,4 +1,9 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong on Jun 23th, 2018:
+ * The stdout/stderr are commented for the correct output to R terminal.
+ *
  * @section DESCRIPTION
  *
  * Open a file named by string and associate a stream with it.
@@ -96,7 +101,7 @@ open_file(char string[],
         }
     }
 
-    fflush(stderr);
+    //fflush(stderr);
 
     return stream;
 }

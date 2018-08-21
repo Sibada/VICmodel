@@ -9,4 +9,3 @@ vic_version()
 \description{
 Display version of VIC model and this package.
 }
-

@@ -1,4 +1,11 @@
 /******************************************************************************
+*
+* @section MODIFICATION
+*
+* Modification by Ruida Zhong on June 24th, 2018:
+* The `Rprintf` are modified to `RRprintf` for It can correctly output to the
+* R console.
+*
 * @section DESCRIPTION
 *
 * This routine writes soil variables to stdout.
@@ -46,43 +53,43 @@ write_layer(layer_data_struct *layer,
     size_t               frost_area;
     double               avg_ice;
 
-    printf("Layer Data for Vegetation Type #%i\n", veg);
-    printf("Layer:\t");
+    Rprintf("Layer Data for Vegetation Type #%i\n", veg);
+    Rprintf("Layer:\t");
     for (index = 0; index < options.Nlayer; index++) {
-        printf("\t\t%zu", index + 1);
+        Rprintf("\t\t%zu", index + 1);
     }
-    printf("\nEvaporation:\t");
+    Rprintf("\nEvaporation:\t");
     for (index = 0; index < options.Nlayer; index++) {
-        printf("\t%f", layer[index].evap);
+        Rprintf("\t%f", layer[index].evap);
     }
-    printf("\n      Kappa:\t");
+    Rprintf("\n      Kappa:\t");
     for (index = 0; index < options.Nlayer; index++) {
-        printf("\t%f", layer[index].kappa);
+        Rprintf("\t%f", layer[index].kappa);
     }
-    printf("\n         Cs:\t");
+    Rprintf("\n         Cs:\t");
     for (index = 0; index < options.Nlayer; index++) {
-        printf("\t%f", layer[index].Cs);
+        Rprintf("\t%f", layer[index].Cs);
     }
-    printf(
+    Rprintf(
         "\n\nMoisture Table\n---------------------------------------------------------------------------\n Moist:\t");
     for (index = 0; index < options.Nlayer; index++) {
-        printf("\t%f", layer[index].moist);
+        Rprintf("\t%f", layer[index].moist);
     }
-    printf("\n        Ice:\t");
+    Rprintf("\n        Ice:\t");
     for (index = 0; index < options.Nlayer; index++) {
         avg_ice = 0;
         for (frost_area = 0; frost_area < options.Nfrost; frost_area++) {
             avg_ice += layer[index].ice[frost_area] * frost_fract[frost_area];
         }
-        printf("\t%f", avg_ice);
+        Rprintf("\t%f", avg_ice);
     }
-    printf(
+    Rprintf(
         "\n---------------------------------------------------------------------------\nLayer Moist:\t");
     sum_moist = 0.;
     for (index = 0; index < options.Nlayer; index++) {
         layer_moist = layer[index].moist;
         sum_moist += layer_moist;
-        printf("\t%f", layer_moist);
+        Rprintf("\t%f", layer_moist);
     }
-    printf("\n\n-----> Total Moisture = %f\n\n", sum_moist);
+    Rprintf("\n\n-----> Total Moisture = %f\n\n", sum_moist);
 }

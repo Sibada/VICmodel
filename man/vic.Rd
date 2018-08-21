@@ -2,11 +2,14 @@
 % Please edit documentation in R/vic.R
 \name{vic}
 \alias{vic}
+\alias{print.vic_output}
 \title{VIC model run for each gridcells}
 \usage{
 vic(forcing, soil, veg, output_info = NULL, veglib = NULL,
   snowband = NULL, lake = NULL, forcing_veg = NULL,
   veg_force_types = c("albedo", "LAI", "fcanopy"), parall = FALSE)
+
+\method{print}{vic_output}(x, ...)
 }
 \arguments{
 \item{forcing}{meteorological forcing data. Must be a list of numeral matrix
@@ -36,11 +39,38 @@ parameters (optional). See details.}
 provided when using vegetation forcing data.}
 
 \item{parall}{Determined if run the VIC parallely. If it is TRUE,
-\code{registerDoParallel()} in package \code{doParallel} is
+\code{registerDoParallel()} in package \pkg{doParallel} is
 need to be used before run the VIC.}
+
+\item{x}{Return of the `vic()` function for `print()`.}
+
+\item{...}{Other arguments to print.}
 }
 \value{
-A list containing output tables and time table.
+A list containing output tables, time table and model settings.
+
+VIC in R supports multiple "output tables" with different output timescales.
+For example,
+you can put soil moisture and soil temperature in a table with monthly
+timescale and put runoff, baseflow in another table with daily timescale.
+
+You can use \code{print()} to print the summary of the returns.
+The returns includes:
+\tabular{ll}{
+  \code{output} \tab One or several "output tables" and each of them containing
+several output variables, which is determined by the \code{output_info}
+parameter. The name of the "table" would also be which \code{output_info}
+determined. Each "table" containing several numerial matrices corresponding
+to the output variables. Each row of the matrices is output data for a
+time step while each column is output data for a gridcell. \cr
+
+  \code{timetable} \tab Containing initiation time, model running time and
+final (orgnizate outputs) time of the VIC model running.\cr
+
+  \code{global_options} \tab Global options setted for this model run. \cr
+  \code{output_infos} \tab Output settings determined by the \code{output_info}
+parameter.
+}
 }
 \description{
 Run the VIC model for each gridcells by providing several meteorological
@@ -57,16 +87,16 @@ matrixs is corresponding to a time step while each column of the matrixs
 is corresponding to a gridcell, which other must be the same as those
 in soil parameter.
 
---------------------------------------------------------------------------------
+\preformatted{-------------------------------------------------------------}
 
 Parameter \code{soil} must be a numeric data frame or matrix that containing
 soil parameters. The style of this is the same as the soil parameter file
 of the classic VIC, that is, each row restores the parameter of a cell
 while each column restores one type of parameter. Detail see
-http://vic.readthedocs.io/en/master/Documentation/Drivers/Classic/SoilParam/
+\url{http://vic.readthedocs.io/en/master/Documentation/Drivers/Classic/SoilParam/}
 in the official VIC documentation webside.
 
---------------------------------------------------------------------------------
+\preformatted{-------------------------------------------------------------}
 
 Parameter \code{veg} must be a list containing several numeral matrixs that
 Those matrixs restore the vegetation parameters that are corresponding
@@ -90,7 +120,7 @@ c(veg_type, area_fract, rootzone_1_depth,
   albedo_Jan, albedo_Feb, albedo_Mar, ..., albedo_Dec)
 }
 
---------------------------------------------------------------------------------
+\preformatted{-------------------------------------------------------------}
 
 Parameter \code{output_info} is used to determine the output variables,
 output timescale (monthly, daily, sub-daily, or each 6 days, etc.),
@@ -102,30 +132,34 @@ output_info <- list(timescale = 'timescale', aggpar = aggpar,
                     aggtypes = c('aggtype_1', 'aggtype_2', 'aggtype_3'))
 }
 
+And a output table (a list containing the output variables in matrix form)
+named "output" would be returned. You can obtain the variables use code like
+\code{res$output$OUT_...}.
 Names of the items in the list (e.g. timescale, outvars) must be those
 specified as follows:
-\itemize{
-\item \code{timescale}:  {Output timescale, including 'never', 'step', 'second',
+\tabular{ll}{
+\code{timescale} \tab Output timescale, including 'never', 'step', 'second',
 'minute', 'hour', 'day', 'month', 'year', 'date', and 'end'. 'never'
 means never output, 'step' means use the input timestep, 'date'
 means output at a specific date, and 'end' means output at the last
-timestep.}
-\item \code{aggpar}:  {If 'timescale' is set to those except 'never', 'date' and
+timestep.\cr
+\code{aggpar} \tab If 'timescale' is set to those except 'never', 'date' and
 'end', it determined the intervals of the timescale to pass before output.
 If 'timescale' is 'day' and 'aggpar' is 6, that means data outputs per 6
 days.
 If 'timescale' is 'date', it should be a \code{Date} type and it could be
-generated use \code{as.Date('YYYY-mm-dd')}.}
-\item \code{outvars}:  {A sequence of names of output data types. The available
+generated use \code{as.Date('YYYY-mm-dd')}.\cr
+\code{outvars} \tab A sequence of names of output data types. The available
 data types please see the VIC official documentation website at
-\url{http://vic.readthedocs.io/en/master/Documentation/OutputVarList/}.}
-\item \code{aggtypes}:  {Optional. A sequence of string determine how to aggregrate
-the output data when output timescale is larger than input timescale,
-Including 'avg' (average), 'begin', 'end', 'max', 'min', 'sum', 'default'.
+\url{http://vic.readthedocs.io/en/master/Documentation/OutputVarList/}.\cr
+\code{aggtypes} \tab Optional. A sequence of string determine how to
+aggregrate the output data when output timescale is larger than input
+timescale, Including 'avg' (average), 'begin', 'end', 'max', 'min', 'sum',
+'default'.
 Each string in it must be corresponding to those in 'outvars'.
 If input timescale is daily, while output timescale is monthly, and
 aggtype is 'begin', it would output the data of the first day of each
-month.}
+month.
 }
 
 If multiple output timescales are used, the outputs could be divided
@@ -141,7 +175,9 @@ out_info <- list(
 )
 }
 
---------------------------------------------------------------------------------
+This would return two output tables named "wb" and "eb" respectively.
+
+\preformatted{-------------------------------------------------------------}
 
 Parameter \code{veglib} is a matrix or a numeric dataframe of a vegetation
 parameter library. Each row determines a type of vegetation while each
@@ -151,7 +187,7 @@ library of the NASA Landsurface Data Assimination System (LDAS) (Rodell
 et al., 2004), which contains 11 types of vegetation with the vegetation
 classification of UMD.
 
---------------------------------------------------------------------------------
+\preformatted{-------------------------------------------------------------}
 
 Parameter \code{snowband} is a matrix or a numeric dataframe determines
 the elevation band information for each gridcells. Each row determines
@@ -174,6 +210,26 @@ each elevation band; ELEV_i is their mean elevation; PFRAC_i is there
 precipitation fraction. n is the number of elevation bands for each
 gridcell and is determined by \code{'nbands'} in the global options.
 This can be set used \code{veg_param('nbands', n)}.
+
+\preformatted{-------------------------------------------------------------}
+
+Parameter \code{forcing_veg} must be a list containing several 3D numeral
+arrays that containing vegetation forcing data such as LAI, albedo and
+fraction of canopy. Different to parameter \code{forcing}, each 3D array
+in the list is the vegetation forcing data for a single gridcell, and the
+order of the 3D arrays must be corresponding to the order of the gridcells
+determined in the soil parameter.
+
+The dimensions of a 3D array are represents:
+
+[timestep, vegetation tile, forcing type].
+
+That is, the first dimension determines the data of the timesteps, the
+second dimension determines the data for the different vegetation tiles
+in this gridcell that determined by the vegetation parameters, while
+the third dimension determined the data of different forcing data type
+(LAI, albedo or fcanopy), which should be corresponding to the parameter
+\code{veg_force_types}.
 }
 \examples{
 data(STEHE)
@@ -193,16 +249,12 @@ vic_param('snow_step_per_day', 24)
 vic_param('runoff_step_per_day', 24)
 
 outputs <- vic(forcing, soil, veg)
-names(outputs)
-outputs$time_table
+print(outputs)
 
-# Using snowbands
+# Use user defind outputs and snowband parameters
 vic_param('nbands', 5)
 band <- STEHE$snowbands
-outputs <- vic(forcing, soil, veg, snowband = band)
-outputs$time_table
 
-# User defind outputs
 out_info <- list(
   wb = list(timescale = 'hour', aggpar = 6,
             outvars = c('OUT_RUNOFF', 'OUT_BASEFLOW', 'OUT_SOIL_MOIST'),
@@ -211,15 +263,18 @@ out_info <- list(
             outvars = c('OUT_SWE', 'OUT_SOIL_TEMP'),
             aggtypes = c('avg', 'min'))
 )
-outputs <- vic(forcing, soil, veg, snowband = band, output_info = out_info)
-names(outputs)
 
-# Parallelization
+outputs <- vic(forcing, soil, veg, snowband = band, output_info = out_info)
+print(outputs)
+
+# Example of parallelization
+\dontrun{
 library(doParallel)
 registerDoParallel(cores=4)
-outputs <- vic(forcing, soil, veg, snowband = band, parall = T)
+outputs <- vic(forcing, soil, veg, snowband = band, parall = TRUE)
 stopImplicitCluster()
-outputs$time_table
+print(outputs)
+}
 
 }
 \references{
@@ -237,4 +292,3 @@ C.-J. Meng, K. Arsenault, B. Cosgrove, J. Radakovich, M. Bosilovich,
 J.K. Entin, J.P. Walker, D. Lohmann, and D. Toll, The Global Land Data
 Assimilation System, Bull. Amer. Meteor. Soc., 85(3), 381-394, 2004
 }
-

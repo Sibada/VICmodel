@@ -4,7 +4,8 @@
 \alias{read_veg_classic}
 \title{Read the classic VIC vegetation parameter file.}
 \usage{
-read_veg_classic(vegfile, rootbands = 3, hasLAI = F)
+read_veg_classic(vegfile, rootbands = 3, hasLAI = FALSE, hasFCAN = FALSE,
+  hasALB = FALSE)
 }
 \arguments{
 \item{vegfile}{Path of the vegetation parameter file.}
@@ -12,6 +13,10 @@ read_veg_classic(vegfile, rootbands = 3, hasLAI = F)
 \item{rootbands}{Number of root bands.}
 
 \item{hasLAI}{If the file includes LAI data.}
+
+\item{hasFCAN}{If the file includes fcanopy data.}
+
+\item{hasALB}{If the file includes albedo data.}
 }
 \value{
 The vegetation parameter input (A list) for the run of
@@ -21,4 +26,13 @@ VIC model in this package.
 Read the ASCII vegetation parameter file
 of the classic VIC model
 }
+\details{
+The detail of the vegetation parameter file of the classic VIC please
+see \url{http://vic.readthedocs.io/en/master/Documentation/Drivers/Classic/VegParam/}
+for the VIC official documentation. Here is an example of the vegatation
+file of Two vegetation tiles with three root zones in the seventh grid
+cell with LAI data.
 
+\preformatted{
+}
+}

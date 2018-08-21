@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// aux_Lohmann_conv
+NumericVector aux_Lohmann_conv(NumericMatrix tmpm);
+RcppExport SEXP _VICmodel_aux_Lohmann_conv(SEXP tmpmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type tmpm(tmpmSEXP);
+    rcpp_result_gen = Rcpp::wrap(aux_Lohmann_conv(tmpm));
+    return rcpp_result_gen;
+END_RCPP
+}
 // vic_run_cell
 List vic_run_cell(List vic_options, NumericMatrix forcing, NumericVector soil_par, NumericVector snowband, NumericMatrix veg_par, NumericVector lake_par, NumericMatrix forcing_veg, NumericMatrix veglib, List output_info);
 RcppExport SEXP _VICmodel_vic_run_cell(SEXP vic_optionsSEXP, SEXP forcingSEXP, SEXP soil_parSEXP, SEXP snowbandSEXP, SEXP veg_parSEXP, SEXP lake_parSEXP, SEXP forcing_vegSEXP, SEXP veglibSEXP, SEXP output_infoSEXP) {
@@ -35,6 +46,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_VICmodel_aux_Lohmann_conv", (DL_FUNC) &_VICmodel_aux_Lohmann_conv, 1},
     {"_VICmodel_vic_run_cell", (DL_FUNC) &_VICmodel_vic_run_cell, 9},
     {"_VICmodel_vic_version", (DL_FUNC) &_VICmodel_vic_version, 0},
     {NULL, NULL, 0}

@@ -1,4 +1,11 @@
 /******************************************************************************
+*
+* @section MODIFICATION
+*
+* Modification by Ruida Zhong on June 24th, 2018:
+* The `printf` are modified to `Rprintf` for It can correctly output to the
+* R console.
+*
 * \file
 * \author  Keith Cherkauer <cherkaue@purdue.edu>
 *
@@ -37,8 +44,8 @@ void
 write_vegvar(veg_var_struct *veg,
              int             n)
 {
-    printf("Vegetation Variables: vegtype %i\n", n);
-    printf("\tcanopyevap  = %f\n", veg->canopyevap);
-    printf("\tWdew        = %f\n", veg->Wdew);
-    printf("\tthroughfall = %f\n", veg->throughfall);
+    Rprintf("Vegetation Variables: vegtype %i\n", n);
+    Rprintf("\tcanopyevap  = %f\n", veg->canopyevap);
+    Rprintf("\tWdew        = %f\n", veg->Wdew);
+    Rprintf("\tthroughfall = %f\n", veg->throughfall);
 }

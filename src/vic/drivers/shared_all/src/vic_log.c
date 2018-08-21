@@ -1,4 +1,9 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong on Jun 23th, 2018:
+ * The stdout/stderr are commented for the correct output to R terminal.
+ *
  * @section DESCRIPTION
  *
  * calculates nitrogen scaling factors for all canopy layers, following eqns
@@ -38,11 +43,12 @@ void
 finalize_logging(void)
 {
     extern FILE *LOG_DEST;
-
+    /*
     if (!(LOG_DEST == stdout || LOG_DEST == stderr)) {
         fclose(LOG_DEST);
         LOG_DEST = stderr;
     }
+     */
 }
 
 /******************************************************************************
@@ -106,7 +112,7 @@ initialize_log(void)
 {
     extern FILE *LOG_DEST;
 
-    LOG_DEST = stderr;
+    //LOG_DEST = stderr;
 }
 
 /******************************************************************************
