@@ -160,7 +160,7 @@ print_trace(void)
     size_t i;
 
     size = backtrace(array, 50);
-    strings = backtrace_symbols(array, size);
+    strings = (char **)backtrace_symbols(array, size);
 
     /* Note: we are ignoring the first and last stack frame
        the first is this function, the last is the linker, neither are
