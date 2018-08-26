@@ -6,7 +6,5 @@ cache: packages
 os:
   - linux
   - osx
-  - win32
-  - win64
-  
+
 warnings_are_errors: false
