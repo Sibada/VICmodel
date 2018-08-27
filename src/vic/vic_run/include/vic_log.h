@@ -169,9 +169,11 @@ void Rf_warning(const char *, ...);
                                                 errno = 0; exit( \
                                                     EXIT_FAILURE); }\
 */
+
 #define check_alloc_status(A, M, \
-                           ...) if (A == NULL) {log_err(M, ## __VA_ARGS__); \
-                                                errno = 0;}
+                           ...) if (A == NULL) {Rf_error("%s: " M "\n", \
+                                                clean_errno(), ## __VA_ARGS__);}
+
 /*
 #define sentinel(M, ...)  {log_err(M, ## __VA_ARGS__); errno = 0; exit( \
                                EXIT_FAILURE); }
