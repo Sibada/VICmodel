@@ -1,4 +1,11 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong on Aug. 27th, 2018:
+ * Fix the warnings like "control reaches end of non-void function
+ * [-Wreturn-type]" by add a simple return line at the end of the
+ * functions.
+ *
  * @section DESCRIPTION
  *
  * This file includes routines to help parse and process VIC input files.
@@ -41,6 +48,8 @@ str_to_bool(char str[])
     else {
         log_err("%s is neither TRUE nor FALSE", str);
     }
+
+    return false; // To avoid warnings.
 }
 
 /******************************************************************************
@@ -132,6 +141,7 @@ str_to_agg_type(char aggstr[])
             log_err("Unknown aggregation type found: %s", aggstr);
         }
     }
+    return 0; // To avoid warnings.
 }
 
 /******************************************************************************
@@ -166,6 +176,8 @@ str_to_out_type(char typestr[])
             log_err("Unknown out type found: %s", typestr);
         }
     }
+
+    return 0; // To avoid warnings.
 }
 
 /******************************************************************************
@@ -221,6 +233,8 @@ str_to_freq_flag(char freq[])
     else {
         log_err("Unknown frequency flag found: %s", freq);
     }
+
+    return 0; // To avoid warnings.
 }
 
 /******************************************************************************
@@ -273,6 +287,8 @@ str_to_calendar(char *cal_chars)
     else {
         log_err("Unknown calendar specified: %s", cal_chars);
     }
+
+    return 0; // To avoid warnings.
 }
 
 /******************************************************************************
@@ -297,6 +313,8 @@ str_to_timeunits(char units_chars[])
     else {
         log_err("Unknown time units specified: %s", units_chars);
     }
+
+    return 0; // To avoid warnings.
 }
 
 /******************************************************************************

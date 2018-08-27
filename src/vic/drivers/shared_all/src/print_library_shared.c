@@ -1,4 +1,10 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong on Aug. 27th, 2018:
+ * Fix the warnings like "too many arguments for format
+ * [-Wformat-extra-args]" by replace "%zd" and "%zu" by "%d".
+ *
  * @section DESCRIPTION
  *
  * Print library.
@@ -48,7 +54,7 @@ print_cell_data(cell_data_struct *cell,
     fprintf(LOG_DEST, "\tCInter      : %f\n", cell->CInter);
     fprintf(LOG_DEST, "\tCSlow       : %f\n", cell->CSlow);
     for (i = 0; i < nlayers; i++) {
-        fprintf(LOG_DEST, "\tlayer %zd   :\n", i);
+        fprintf(LOG_DEST, "\tlayer %d   :\n", i);
         print_layer_data_states(&(cell->layer[i]), nfrost);
     }
     fprintf(LOG_DEST, "\trootmoist   : %f\n", cell->rootmoist);
@@ -68,7 +74,7 @@ print_cell_data(cell_data_struct *cell,
     fprintf(LOG_DEST, "\tRhSlow      : %f\n", cell->RhSlow);
     fprintf(LOG_DEST, "\tRhTot       : %f\n", cell->RhTot);
     for (i = 0; i < nlayers; i++) {
-        fprintf(LOG_DEST, "\tlayer %zd   :\n", i);
+        fprintf(LOG_DEST, "\tlayer %d   :\n", i);
         print_layer_data_fluxes(&(cell->layer[i]));
     }
 }
@@ -155,8 +161,8 @@ print_energy_bal(energy_bal_struct *eb,
         fprintf(LOG_DEST, "\t%f", eb->moist[i]);
     }
     fprintf(LOG_DEST, "\n");
-    fprintf(LOG_DEST, "\tNfrost           : %zu\n", eb->Nfrost);
-    fprintf(LOG_DEST, "\tNthaw            : %zu\n", eb->Nthaw);
+    fprintf(LOG_DEST, "\tNfrost           : %d\n", eb->Nfrost);
+    fprintf(LOG_DEST, "\tNthaw            : %d\n", eb->Nthaw);
     fprintf(LOG_DEST, "\tT                :");
     for (i = 0; i < nnodes; i++) {
         fprintf(LOG_DEST, "\t%f", eb->T[i]);
@@ -257,25 +263,25 @@ print_global_param(global_param_struct *gp)
     fprintf(LOG_DEST, "\tdt                  : %.4f\n", gp->dt);
     fprintf(LOG_DEST, "\tsnow_dt             : %.4f\n", gp->snow_dt);
     fprintf(LOG_DEST, "\trunoff_dt           : %.4f\n", gp->runoff_dt);
-    fprintf(LOG_DEST, "\tmodel_steps_per_day : %zu\n", gp->model_steps_per_day);
-    fprintf(LOG_DEST, "\tsnow_steps_per_day  : %zu\n", gp->snow_steps_per_day);
-    fprintf(LOG_DEST, "\trunoff_steps_per_day: %zu\n",
+    fprintf(LOG_DEST, "\tmodel_steps_per_day : %d\n", gp->model_steps_per_day);
+    fprintf(LOG_DEST, "\tsnow_steps_per_day  : %d\n", gp->snow_steps_per_day);
+    fprintf(LOG_DEST, "\trunoff_steps_per_day: %d\n",
             gp->runoff_steps_per_day);
     fprintf(LOG_DEST, "\tendday              : %hu\n", gp->endday);
     fprintf(LOG_DEST, "\tendmonth            : %hu\n", gp->endmonth);
     fprintf(LOG_DEST, "\tendyear             : %hu\n", gp->endyear);
     for (i = 0; i < 2; i++) {
-        fprintf(LOG_DEST, "\tforceday[%zd]        : %hu\n", i, gp->forceday[i]);
-        fprintf(LOG_DEST, "\tforcesec[%zd]        : %u\n", i, gp->forcesec[i]);
-        fprintf(LOG_DEST, "\tforcemonth[%zd]      : %hu\n", i,
+        fprintf(LOG_DEST, "\tforceday[%d]        : %hu\n", i, gp->forceday[i]);
+        fprintf(LOG_DEST, "\tforcesec[%d]        : %u\n", i, gp->forcesec[i]);
+        fprintf(LOG_DEST, "\tforcemonth[%d]      : %hu\n", i,
                 gp->forcemonth[i]);
-        fprintf(LOG_DEST, "\tforceoffset[%zd]     : %hu\n", i,
+        fprintf(LOG_DEST, "\tforceoffset[%d]     : %hu\n", i,
                 gp->forceoffset[i]);
-        fprintf(LOG_DEST, "\tforceskip[%zd]       : %u\n", i, gp->forceskip[i]);
-        fprintf(LOG_DEST, "\tforceyear[%zd]       : %hu\n", i,
+        fprintf(LOG_DEST, "\tforceskip[%d]       : %u\n", i, gp->forceskip[i]);
+        fprintf(LOG_DEST, "\tforceyear[%d]       : %hu\n", i,
                 gp->forceyear[i]);
     }
-    fprintf(LOG_DEST, "\tnrecs               : %zu\n", gp->nrecs);
+    fprintf(LOG_DEST, "\tnrecs               : %d\n", gp->nrecs);
     fprintf(LOG_DEST, "\tstartday            : %hu\n", gp->startday);
     fprintf(LOG_DEST, "\tstartsec            : %u\n", gp->startsec);
     fprintf(LOG_DEST, "\tstartmonth          : %hu\n", gp->startmonth);
@@ -296,7 +302,7 @@ print_lake_con(lake_con_struct *lcon,
     size_t i;
 
     fprintf(LOG_DEST, "lake_con:\n");
-    fprintf(LOG_DEST, "\tnumnod   : %zu\n", lcon->numnod);
+    fprintf(LOG_DEST, "\tnumnod   : %d\n", lcon->numnod);
     fprintf(LOG_DEST, "\tz        :");
     for (i = 0; i < nlnodes; i++) {
         fprintf(LOG_DEST, "\t%.4f", lcon->z[i]);
@@ -473,16 +479,16 @@ print_option(option_struct *option)
             option->JULY_TAVG_SUPPLIED ? "true" : "false");
     fprintf(LOG_DEST, "\tLAKES                : %s\n",
             option->LAKES ? "true" : "false");
-    fprintf(LOG_DEST, "\tNcanopy              : %zu\n", option->Ncanopy);
-    fprintf(LOG_DEST, "\tNfrost               : %zu\n", option->Nfrost);
-    fprintf(LOG_DEST, "\tNlakenode            : %zu\n", option->Nlakenode);
-    fprintf(LOG_DEST, "\tNlayer               : %zu\n", option->Nlayer);
-    fprintf(LOG_DEST, "\tNnode                : %zu\n", option->Nnode);
+    fprintf(LOG_DEST, "\tNcanopy              : %d\n", option->Ncanopy);
+    fprintf(LOG_DEST, "\tNfrost               : %d\n", option->Nfrost);
+    fprintf(LOG_DEST, "\tNlakenode            : %d\n", option->Nlakenode);
+    fprintf(LOG_DEST, "\tNlayer               : %d\n", option->Nlayer);
+    fprintf(LOG_DEST, "\tNnode                : %d\n", option->Nnode);
     fprintf(LOG_DEST, "\tNOFLUX               : %s\n",
             option->NOFLUX ? "true" : "false");
-    fprintf(LOG_DEST, "\tNVEGTYPES            : %zu\n", option->NVEGTYPES);
+    fprintf(LOG_DEST, "\tNVEGTYPES            : %d\n", option->NVEGTYPES);
     fprintf(LOG_DEST, "\tRC_MODE              : %d\n", option->RC_MODE);
-    fprintf(LOG_DEST, "\tROOT_ZONES           : %zu\n", option->ROOT_ZONES);
+    fprintf(LOG_DEST, "\tROOT_ZONES           : %d\n", option->ROOT_ZONES);
     fprintf(LOG_DEST, "\tQUICK_FLUX           : %s\n",
             option->QUICK_FLUX ? "true" : "false");
     fprintf(LOG_DEST, "\tQUICK_SOLVE          : %s\n",
@@ -490,7 +496,7 @@ print_option(option_struct *option)
     fprintf(LOG_DEST, "\tSHARE_LAYER_MOIST    : %s\n",
             option->SHARE_LAYER_MOIST ? "true" : "false");
     fprintf(LOG_DEST, "\tSNOW_DENSITY         : %d\n", option->SNOW_DENSITY);
-    fprintf(LOG_DEST, "\tSNOW_BAND            : %zu\n", option->SNOW_BAND);
+    fprintf(LOG_DEST, "\tSNOW_BAND            : %d\n", option->SNOW_BAND);
     fprintf(LOG_DEST, "\tSPATIAL_FROST        : %s\n",
             option->SPATIAL_FROST ? "true" : "false");
     fprintf(LOG_DEST, "\tSPATIAL_SNOW         : %s\n",
@@ -521,7 +527,7 @@ print_option(option_struct *option)
             option->INIT_STATE ? "true" : "false");
     fprintf(LOG_DEST, "\tSAVE_STATE           : %s\n",
             option->SAVE_STATE ? "true" : "false");
-    fprintf(LOG_DEST, "\tNoutstreams          : %zu\n", option->Noutstreams);
+    fprintf(LOG_DEST, "\tNoutstreams          : %d\n", option->Noutstreams);
 }
 
 /******************************************************************************
@@ -538,7 +544,7 @@ print_out_data(double         **out_data,
 
     for (i = 0; i < N_OUTVAR_TYPES; i++) {
         fprintf(LOG_DEST, "\tvarname: %s\n", metadata[i].varname);
-        fprintf(LOG_DEST, "\t\tnelem: %zu\n", metadata[i].nelem);
+        fprintf(LOG_DEST, "\t\tnelem: %d\n", metadata[i].nelem);
         fprintf(LOG_DEST, "\t\tdata:");
         for (j = 0; j < metadata[i].nelem; j++) {
             fprintf(LOG_DEST, "\t%.4f", out_data[i][j]);
@@ -564,8 +570,8 @@ print_stream(stream_struct   *stream,
     fprintf(LOG_DEST, "\tfilename: %s\n", stream->filename);
     fprintf(LOG_DEST, "\tfh: %p\n", stream->fh);
     fprintf(LOG_DEST, "\tfile_format: %hu\n", stream->file_format);
-    fprintf(LOG_DEST, "\tnvars: %zu\n", stream->nvars);
-    fprintf(LOG_DEST, "\tngridcells: %zu\n", stream->ngridcells);
+    fprintf(LOG_DEST, "\tnvars: %d\n", stream->nvars);
+    fprintf(LOG_DEST, "\tngridcells: %d\n", stream->ngridcells);
     fprintf(LOG_DEST, "\tagg_alarm:\n    ");
     print_alarm(&(stream->agg_alarm));
     fprintf(
@@ -573,12 +579,12 @@ print_stream(stream_struct   *stream,
         "\t# \tVARID        \tVARNAME \tTYPE \tMULT \tFORMAT        \tAGGTYPE\n");
     for (i = 0; i < stream->nvars; i++) {
         varid = stream->varid[i];
-        fprintf(LOG_DEST, "\t%zu \t%u \t%20s \t%hu \t%f \t%10s \t%hu\n",
+        fprintf(LOG_DEST, "\t%d \t%u \t%20s \t%hu \t%f \t%10s \t%hu\n",
                 i, varid, metadata[varid].varname,
                 stream->type[i], stream->mult[i], stream->format[i],
                 stream->aggtype[i]);
     }
-    fprintf(LOG_DEST, "\taggdata shape: (%zu, %zu, nelem, 1)\n",
+    fprintf(LOG_DEST, "\taggdata shape: (%d, %d, nelem, 1)\n",
             stream->ngridcells, stream->nvars);
 
     fprintf(LOG_DEST, "\n");
@@ -615,11 +621,11 @@ print_out_metadata(metadata_struct *metadata,
     fprintf(LOG_DEST, "metadata_struct: \n");
 
     for (i = 0; i < nvars; i++) {
-        fprintf(LOG_DEST, "\t%s (%zu)\n", metadata[i].varname, i);
+        fprintf(LOG_DEST, "\t%s (%d)\n", metadata[i].varname, i);
         fprintf(LOG_DEST, "\t\tlong_name: %s\n", metadata[i].long_name);
         fprintf(LOG_DEST, "\t\tunits: %s\n", metadata[i].units);
         fprintf(LOG_DEST, "\t\tdescription: %s\n", metadata[i].description);
-        fprintf(LOG_DEST, "\t\tnelem: %zu\n", metadata[i].nelem);
+        fprintf(LOG_DEST, "\t\tnelem: %d\n", metadata[i].nelem);
     }
     fprintf(LOG_DEST, "\n");
 }
@@ -644,10 +650,10 @@ print_param_set(param_set_struct *param_set)
             param_set->FORCE_FORMAT[1]);
     fprintf(LOG_DEST, "\tFORCE_INDEX :\n");
     for (i = 0; i < N_FORCING_TYPES; i++) {
-        fprintf(LOG_DEST, "\t\t%zd: %d %d\n", i, param_set->FORCE_INDEX[0][i],
+        fprintf(LOG_DEST, "\t\t%d: %d %d\n", i, param_set->FORCE_INDEX[0][i],
                 param_set->FORCE_INDEX[1][i]);
     }
-    fprintf(LOG_DEST, "\tN_TYPES     : %zu %zu\n", param_set->N_TYPES[0],
+    fprintf(LOG_DEST, "\tN_TYPES     : %d %d\n", param_set->N_TYPES[0],
             param_set->N_TYPES[1]);
 }
 
@@ -1144,7 +1150,7 @@ print_veg_con(veg_con_struct *vcon,
     }
     fprintf(LOG_DEST, "\n");
     fprintf(LOG_DEST, "\tveg_class       : %d\n", vcon->veg_class);
-    fprintf(LOG_DEST, "\tvegetat_type_num: %zu\n", vcon->vegetat_type_num);
+    fprintf(LOG_DEST, "\tvegetat_type_num: %d\n", vcon->vegetat_type_num);
     if (blowing) {
         fprintf(LOG_DEST, "\tsigma_slope     : %.4f\n", vcon->sigma_slope);
         fprintf(LOG_DEST, "\tlag_one         : %.4f\n", vcon->lag_one);
@@ -1203,7 +1209,7 @@ print_veg_lib(veg_lib_struct *vlib,
         fprintf(LOG_DEST, "\t%.2f", vlib->emissivity[i]);
     }
     fprintf(LOG_DEST, "\n");
-    fprintf(LOG_DEST, "\tNVegLibTypes  : %zu\n", vlib->NVegLibTypes);
+    fprintf(LOG_DEST, "\tNVegLibTypes  : %d\n", vlib->NVegLibTypes);
     fprintf(LOG_DEST, "\trad_atten     : %.4f\n", vlib->rad_atten);
     fprintf(LOG_DEST, "\trarc          : %.4f\n", vlib->rarc);
     fprintf(LOG_DEST, "\trmin          : %.4f\n", vlib->rmin);

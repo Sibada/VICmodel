@@ -1,4 +1,11 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong on Aug. 27th, 2018:
+ * Fix the warnings like "control reaches end of non-void function
+ * [-Wreturn-type]" by add a simple return line at the end of the
+ * functions.
+ *
  * @section DESCRIPTION
  *
  * Calculate energy of sublimation from blowing snow.
@@ -305,6 +312,8 @@ qromb(double (*funcd)(),
         h[j + 1] = 0.25 * h[j];
     }
     log_err("Too many steps");
+
+    return 0.; // To avoid warnings.
 }
 
 /******************************************************************************
@@ -484,6 +493,8 @@ rtnewt(double x1,
         }
     }
     log_err("Maximum number of iterations exceeded");
+
+    return 0.; // To avoid warnings.
 }
 
 /******************************************************************************

@@ -1,3 +1,10 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Fix the significant warnings of the compilation of VIC source codes under
+win-builder environment.
+
+
 ## Test environments
 * Mac OS X 10.13.3 (on travis-ci), R 3.5.0
 * ubuntu 14.04.5 LTS (on travis-ci), R 3.5.0
