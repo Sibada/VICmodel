@@ -326,7 +326,7 @@ deal_output_info <- function(output) {
 #' vic_param('start_day', 1)
 #' vic_param('end_year', 1949)
 #' vic_param('end_month', 1)
-#' vic_param('end_day', 10)
+#' vic_param('end_day', 7)
 #' vic_param('step_per_day', 24)
 #' vic_param('snow_step_per_day', 24)
 #' vic_param('runoff_step_per_day', 24)

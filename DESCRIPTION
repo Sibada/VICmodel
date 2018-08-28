@@ -1,6 +1,6 @@
 Package: VICmodel
 Type: Package
-Title: An R implementation of the Variable Infiltration Capacity (VIC) Model
+Title: An R Implementation of the Variable Infiltration Capacity (VIC) Model
 Version: 0.1.0
 Authors@R: person("Ruida", "Zhong", email = "zrd2017@163.com", role = c("aut", "cre"))
 Description: This is an R implementation of the UW Variable Infiltration
@@ -12,8 +12,9 @@ Description: This is an R implementation of the UW Variable Infiltration
     a research model and in its various forms it has been applied to most of the
     major river basins around the world, as well as globally. If you make use of
     this model, please acknowledge the appropriate references listed in the help
-    page of this package or on the references page (http://vic.readthedocs.io/en/
-    master/Documentation/References/) of the VIC official documentation website.
+    page of this package or on the references page
+    <http://vic.readthedocs.io/en/master/Documentation/References/>
+    of the VIC official documentation website.
     These should include Liang et al., 1994 plus any references relevant to the
     features you are using Reference: Liang, X., D. P. Lettenmaier, E. F. Wood, and
     S. J. Burges (1994), A simple hydrologically based model of land surface water

@@ -2,7 +2,7 @@
 This is a resubmission. In this version I have:
 
 * Fix the significant warnings of the compilation of VIC source codes under
-win-builder and Debian environment.
+win-builder and Debian environment, and some problems of DESCRIPTION format.
 
 
 ## Test environments
@@ -29,21 +29,10 @@ There was 1 NOTE for Mac OS X environment:
 
 * This is a new release.
 
-There was 3 NOTE for win-builder environment:
+There was 1 NOTE for win-builder environment:
 
 * This is a new release.
 
-* running examples for arch 'i386' ... [14s] NOTE
-Examples with CPU or elapsed time > 10s
-    user system elapsed
-vic 12.9   0.07   13.01
-
-* running examples for arch 'x64' ... [12s] NOTE
-Examples with CPU or elapsed time > 10s
-     user system elapsed
-vic 11.03   0.03   11.09
-  
-  This might be mainly because of the differences between the C source codes of VIC running on the linux and windows   platform. Moreover, the VIC model is a complex landsurface scheme and hence would require more computation than the   other landsurface models. We suggest that it is normal thus not a significant problem.
   
 ## Reverse dependencies
 
