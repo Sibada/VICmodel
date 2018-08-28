@@ -3,6 +3,8 @@
  *
  * Modification by Ruida Zhong on Jun 23th, 2018:
  * The stdout/stderr are commented for the correct output to R terminal.
+ * Some functions not used by this R package have been commented to avoid
+ * warnings.
  *
  * @section DESCRIPTION
  *
@@ -94,14 +96,14 @@ get_logname(const char *path,
     get_current_datetime(timestamp);
 
     memset(filename, 0, MAXSTRING);
-    if (id != MISSING) {
-        snprintf(filename, MAXSTRING - 1, "%s%s%s.%06d%s", path, prefix,
-                 timestamp, id, ext);
-    }
-    else {
-        snprintf(filename, MAXSTRING - 1, "%s%s%s%s", path, prefix,
-                 timestamp, ext);
-    }
+    //if (id != MISSING) {
+    //    snprintf(filename, MAXSTRING - 1, "%s%s%s.%06d%s", path, prefix,
+    //             timestamp, id, ext);
+    //}
+    //else {
+    //    snprintf(filename, MAXSTRING - 1, "%s%s%s%s", path, prefix,
+    //             timestamp, ext);
+    //}
 }
 
 /******************************************************************************

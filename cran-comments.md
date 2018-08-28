@@ -2,7 +2,7 @@
 This is a resubmission. In this version I have:
 
 * Fix the significant warnings of the compilation of VIC source codes under
-win-builder environment.
+win-builder and Debian environment.
 
 
 ## Test environments

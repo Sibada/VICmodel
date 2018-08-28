@@ -3,6 +3,8 @@
  *
  * Modification by Ruida Zhong on Jun 23th, 2018:
  * The stdout/stderr are commented for the correct output to R terminal.
+ * Some functions not used by this R package have been commented to avoid
+ * warnings.
  *
  * @section DESCRIPTION
  *
@@ -68,12 +70,12 @@ open_file(char string[],
         fclose(stream);
 
         /** uncompress and open zipped file **/
-        sprintf(command, "gzip -d %s", zipname);
-        system(command);
-        stream = fopen(string, type);
-        if (stream == NULL) {
-            log_err("Unable to open File %s", string);
-        }
+        //sprintf(command, "gzip -d %s", zipname);
+        //system(command);
+        //stream = fopen(string, type);
+        //if (stream == NULL) {
+        //    log_err("Unable to open File %s", string);
+        //}
     }
 
     if (strcmp(type, "r") == 0) {
