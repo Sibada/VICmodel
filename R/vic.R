@@ -114,7 +114,7 @@ deal_output_info <- function(output) {
 #' \code{registerDoParallel()} in package \pkg{doParallel} is
 #' need to be used before run the VIC.
 #'
-#' @param x Return of the `vic()` function for `print()`.
+#' @param x Return of \code{\link{vic}} for print.
 #'
 #' @param ... Other arguments to print.
 #'

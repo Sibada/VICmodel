@@ -848,7 +848,7 @@ time_delta(dmy_struct        *dmy_current,
     // non-uniform timedeltas
     else {
         if (n < 1) {
-            log_err("Negative time delta's are not implemented yet")
+            log_err("Negative time delta's are not implemented yet");
         }
 
         // copy dmy structure

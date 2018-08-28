@@ -110,7 +110,8 @@ void Rf_warning(const char *, ...);
                                  __LINE__, ## __VA_ARGS__)
 #endif
 */
-#define log_info(M, ...) Rprintf(M, ## __VA_ARGS__);
+//#define log_info(M, ...) Rprintf(M, ## __VA_ARGS__);
+#define log_info Rprintf
 #else
 #define log_info(M, ...)
 #endif
@@ -127,8 +128,10 @@ void Rf_warning(const char *, ...);
                                  clean_errno(), ## __VA_ARGS__); errno = 0
 #endif
 */
-#define log_warn(M, ...) Rf_warning("%s: " M "\n", \
-                                    clean_errno(), ## __VA_ARGS__); errno = 0;
+//#define log_warn(M, ...) Rf_warning("%s: " M "\n", \
+//                                    clean_errno(), ## __VA_ARGS__); errno = 0;
+#define log_warn Rf_warning
+
 #else
 #define log_warn(M, ...)
 #endif
@@ -148,8 +151,9 @@ void Rf_warning(const char *, ...);
     exit(EXIT_FAILURE);
 #endif
  */
-#define log_err(M, ...) Rf_error("%s: " M "\n", \
-                                 clean_errno(), ## __VA_ARGS__);
+//#define log_err(M, ...) Rf_error("%s: " M "\n", \
+//                                 clean_errno(), ## __VA_ARGS__);
+#define log_err Rf_error
 
 // These depend on previously defined macros
 
@@ -170,9 +174,8 @@ void Rf_warning(const char *, ...);
                                                     EXIT_FAILURE); }\
 */
 
-#define check_alloc_status(A, M, \
-                           ...) if (A == NULL) {Rf_error("%s: " M "\n", \
-                                                clean_errno(), ## __VA_ARGS__);}
+#define check_alloc_status(A, M) if (A == NULL) {Rf_error("%s: " M "\n", \
+                                                clean_errno());}
 
 /*
 #define sentinel(M, ...)  {log_err(M, ## __VA_ARGS__); errno = 0; exit( \

@@ -42,7 +42,7 @@ provided when using vegetation forcing data.}
 \code{registerDoParallel()} in package \pkg{doParallel} is
 need to be used before run the VIC.}
 
-\item{x}{Return of the `vic()` function for `print()`.}
+\item{x}{Return of \code{\link{vic}} for print.}
 
 \item{...}{Other arguments to print.}
 }

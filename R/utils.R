@@ -12,7 +12,7 @@
 #' @details
 #' The detail of the vegetation parameter file of the classic VIC please
 #' see \url{http://vic.readthedocs.io/en/master/Documentation/Drivers/Classic/VegParam/}
-#' for the VIC official documentation. Here is an example of the vegatation
+#' for the VIC official documentation. Here is an example of the vegetation
 #' file of Two vegetation tiles with three root zones in the seventh grid
 #' cell with LAI data.
 #'
