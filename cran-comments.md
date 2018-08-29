@@ -1,8 +1,13 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Fix the significant warnings of the compilation of VIC source codes under
-win-builder and Debian environment, and some problems of DESCRIPTION format.
+* Omit the redundant like "An R Implementation of ..." in the description
+  file.
+  
+* Place the DOI in the Description field in angle brackets.
+
+Thanks for your review.
+Best regards
 
 
 ## Test environments
