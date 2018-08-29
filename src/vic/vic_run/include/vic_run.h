@@ -1,7 +1,7 @@
 /******************************************************************************
- *  * @section MODIFICATION
+ * @section MODIFICATION
  *
- * Modification by Ruida Zhong on May 20th, 2018:
+ * Modification by Ruida Zhong for the R package VICmodel on May 20th, 2018:
  * `double (*funcd) ...` is added by `extern` and its definition
  * is remove to `global.cpp` since global variables defined in head file is not
  * available in C++.

@@ -1,9 +1,24 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Fix the significant warnings of the compilation of VIC source codes under
-win-builder and Debian environment, and some problems of DESCRIPTION format.
+* Replaced the "\dontrun{}" by "\donttest{}" in the Rd files.
 
+* Refered the copyright holders in the inst/COPYRIGHTS, including:
+  
+  Copyright (C) 2016 The Computational Hydrology Group, Department of 
+  Civil and Environmental Engineering, University of Washington.
+  
+  Copyright (C) 2014 The Land Surface Hydrology Group, Department of
+  Civil and Environmental Engineering, University of Washington.
+  (Note: this is the same organization of the Computational Hydrology
+  Group, therefore we only retain those of Computational Hydrology 
+  Group of UW)
+  
+  Copyright (c) 2010, Zed A. Shaw and Mongrel2 Project Contributors.
+  
+Thanks for your review.
+
+Best regards
 
 ## Test environments
 * Mac OS X 10.13.3 (on travis-ci), R 3.5.0

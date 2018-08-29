@@ -1,7 +1,7 @@
 /******************************************************************************
  * @section MODIFICATION
  *
- * Modification by Ruida Zhong on May 20th, 2018:
+ * Modification by Ruida Zhong for the R package VICmodel on May 20th, 2018:
  * The `#include <pwd.h>` is surrounded by `#ifdef __linux__` and `#endif`
  * to ensure the usability for platforms except linux.
  * `char   vic_run_ref_str[MAXSTRING];` is added by `extern` and its definition

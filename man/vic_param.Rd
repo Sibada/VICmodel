@@ -86,3 +86,4 @@ Cherkauer, K. A. and D. P. Lettenmaier, 1999: Hydrologic effects of frozen soils
 Liang, X., E. F. Wood, and D. P. Lettenmaier, 1999: Modeling ground heat flux in land surface parameterization schemes, J. Geophys. Res., 104(D8), 9581-9600.
 Nijssen, B.N., R. Schnur and D.P. Lettenmaier, 2001: Global retrospective estimation of soil moisture using the Variable Infiltration Capacity land surface model, 1980-1993, J. Clim., 14(8), 1790-1808, doi:10.1175/1520-0442(2001)014<1790:GREOSM>2.0.CO;2.
 }
+

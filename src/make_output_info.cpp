@@ -201,7 +201,8 @@ List make_output_tables(List output_infos) {
       if(varid == -1)
         log_err("set_output_var: \"%s\" was not found in the list of "
                   "supported output variable names.  Please use the exact name "
-                  "listed in vic_driver_shared.h.",
+                  "listed in https://vic.readthedocs.io/en/latest/"
+                  "Documentation/OutputVarList/",
                   varname.get_cstring());
 
       ncols += out_metadata[varid].nelem;

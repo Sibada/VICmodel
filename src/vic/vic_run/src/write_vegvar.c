@@ -2,7 +2,7 @@
 *
 * @section MODIFICATION
 *
-* Modification by Ruida Zhong on June 24th, 2018:
+* Modification by Ruida Zhong for the R package VICmodel on June 24th, 2018:
 * The `printf` are modified to `Rprintf` for It can correctly output to the
 * R console.
 *

@@ -2,7 +2,7 @@
  *
  * @section MODIFICATION
  *
- * Modification by Ruida Zhong on Jun 23th, 2018:
+ * Modification by Ruida Zhong for the R package VICmodel on Jun 23th, 2018:
  * Contents of the function `strpdmy()` are commented out for strp date from
  * text file is not needed in R environment, and ensure usability for windows
  * platform since `strptime()` have no implementation in any windows platforms

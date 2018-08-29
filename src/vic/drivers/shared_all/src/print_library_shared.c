@@ -1,7 +1,7 @@
 /******************************************************************************
  * @section MODIFICATION
  *
- * Modification by Ruida Zhong on Aug. 27th, 2018:
+ * Modification by Ruida Zhong for the R package VICmodel on Aug. 27th, 2018:
  * Fix the warnings like "too many arguments for format
  * [-Wformat-extra-args]" by replace "%zd" and "%zu" by "%d".
  *

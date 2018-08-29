@@ -1,9 +1,12 @@
 /******************************************************************************
  * @section MODIFICATION
  *
- * Modification by Ruida Zhong on Jun 23th, 2018:
+ * Modification by Ruida Zhong for the R package VICmodel on Jun 23th, 2018:
  * The stdout/stderr are commented and  `fprintf` are changed to `Rprintf`
  * for the correct output to R terminal.
+ * The parts of "Report Bugs and Issues to ..." in print_licence() are commented
+ * because this is an R package, to avoid confusion and misunderstanding for the
+ * users and trouble and disturbance for the VIC source code developers.
  *
  * @section DESCRIPTION
  *
@@ -149,10 +152,10 @@ print_license()
     Rprintf(
             "  WARRANTY. This is free software, you may redistribute it\n");
     Rprintf(
-            "  under certain conditions; see LICENSE.txt for details.\n\n");
+            "  under certain conditions; see LICENSE for details.\n\n");
 
-    Rprintf(
-            "  Report Bugs and Issues to : https://github.com/UW-Hydro/VIC/issues\n");
-    Rprintf(
-            "  VIC Users Email Listserve : vic_users@u.washington.edu \n\n");
+    //Rprintf(
+    //        "  Report Bugs and Issues to : https://github.com/UW-Hydro/VIC/issues\n");
+    //Rprintf(
+    //        "  VIC Users Email Listserve : vic_users@u.washington.edu \n\n");
 }

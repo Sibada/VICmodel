@@ -78,7 +78,7 @@ deal_output_info <- function(output) {
 
 
 #' VIC model run for each gridcells
-
+#'
 #' @description
 #' Run the VIC model for each gridcells by providing several meteorological
 #' and vegetation (optional) forcing data and land surface parameters (soil,
@@ -315,12 +315,14 @@ deal_output_info <- function(output) {
 #' Assimilation System, Bull. Amer. Meteor. Soc., 85(3), 381-394, 2004
 #'
 #' @examples
+#' # This is a sample data to run VIC.
 #' data(STEHE)
 #'
 #' forcing <- STEHE$forcing
 #' soil <- STEHE$soil
 #' veg <- STEHE$veg
 #'
+#' # Set the global options for a 7-days run.
 #' vic_param('start_year', 1949)
 #' vic_param('start_month', 1)
 #' vic_param('start_day', 1)
@@ -331,10 +333,11 @@ deal_output_info <- function(output) {
 #' vic_param('snow_step_per_day', 24)
 #' vic_param('runoff_step_per_day', 24)
 #'
+#' # Run VIC.
 #' outputs <- vic(forcing, soil, veg)
 #' print(outputs)
 #'
-#' # Use user defind outputs and snowband parameters
+#' # Use user defind outputs and snowband parameters.
 #' vic_param('nbands', 5)
 #' band <- STEHE$snowbands
 #'
@@ -351,7 +354,7 @@ deal_output_info <- function(output) {
 #' print(outputs)
 #'
 #' # Example of parallelization
-#' \dontrun{
+#' \donttest{
 #' library(doParallel)
 #' registerDoParallel(cores=4)
 #' outputs <- vic(forcing, soil, veg, snowband = band, parall = TRUE)

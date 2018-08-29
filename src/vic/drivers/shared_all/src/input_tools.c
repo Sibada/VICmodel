@@ -1,7 +1,7 @@
 /******************************************************************************
  * @section MODIFICATION
  *
- * Modification by Ruida Zhong on Aug. 27th, 2018:
+ * Modification by Ruida Zhong for the R package VICmodel on Aug. 27th, 2018:
  * Fix the warnings like "control reaches end of non-void function
  * [-Wreturn-type]" by add a simple return line at the end of the
  * functions.

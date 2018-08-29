@@ -1,7 +1,7 @@
 /******************************************************************************
  * @section MODIFICATION
  *
- * Modification by Ruida Zhong on Jun 23th, 2018:
+ * Modification by Ruida Zhong for the R package VICmodel on Jun 23th, 2018:
  * The stdout/stderr are commented for the correct output to R terminal.
  * Some functions not used by this R package have been commented to avoid
  * warnings.
