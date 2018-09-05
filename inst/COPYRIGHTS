@@ -71,3 +71,6 @@ File src/vic/vic_run/include/vic_log.h has the following license:
   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+
+This file also has been modified for use in this package and marked as modified
+in the license copyright header.

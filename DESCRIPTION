@@ -4,7 +4,7 @@ Title: The Variable Infiltration Capacity (VIC) Model
 Version: 0.1.0
 Authors@R: c(person("Ruida", "Zhong", email = "zrd2017@163.com", role = c("aut", "cre")),
     person("Xiaohong", "Chen", role = c("aut", "ctb")),
-    person("Joseph", "Hamman", role = c("ctb"), comment = "Contributer and maintainer of VIC source code"),
+    person("Joseph J", "Hamman", role = c("ctb"), comment = "Contributor and maintainer of VIC source code"),
     person("Keith", "Cherkauer", role = c("ctb"),
     comment = "Contributer of codes of src/vic/vic_run/src/write_vegvar.c and 
     src/vic/drivers/shared_all/src/cmd_proc.c")
