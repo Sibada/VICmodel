@@ -1,17 +1,7 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-<<<<<<< HEAD
 * Replaced the "\dontrun{}" by "\donttest{}" in the Rd files.
-=======
-* Omit the redundant like "An R Implementation of ..." in the description
-  file.
-  
-* Place the DOI in the Description field in angle brackets.
-
-Thanks for your review.
-Best regards
->>>>>>> ac9be6ffc34128c0db8a4892767f74eab9592a09
 
 * Refered the copyright holders in the inst/COPYRIGHTS, including:
   
@@ -20,9 +10,9 @@ Best regards
   
   Copyright (C) 2014 The Land Surface Hydrology Group, Department of
   Civil and Environmental Engineering, University of Washington.
-  (Note: this is the same organization of the Computational Hydrology
-  Group, therefore we only retain those of Computational Hydrology 
-  Group of UW)
+  (*Note*: this is the same organization of the Computational Hydrology
+  Group, for the former renamed as the latter, therefore we only retain
+  those of Computational Hydrology Group of UW)
   
   Copyright (c) 2010, Zed A. Shaw and Mongrel2 Project Contributors.
   
