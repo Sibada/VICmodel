@@ -1,7 +1,17 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
+<<<<<<< HEAD
 * Replaced the "\dontrun{}" by "\donttest{}" in the Rd files.
+=======
+* Omit the redundant like "An R Implementation of ..." in the description
+  file.
+  
+* Place the DOI in the Description field in angle brackets.
+
+Thanks for your review.
+Best regards
+>>>>>>> ac9be6ffc34128c0db8a4892767f74eab9592a09
 
 * Refered the copyright holders in the inst/COPYRIGHTS, including:
   
