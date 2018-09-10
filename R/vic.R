@@ -300,19 +300,24 @@ deal_output_info <- function(output) {
 #'
 #'
 #' @references
-#' Liang, X., D. P. Lettenmaier, E. F. Wood, and S. J. Burges (1994), A
+#' Hamman, J. J., Nijssen, B., Bohn, T. J., Gergel, D. R., and Mao, Y. (2018),
+#' The Variable Infiltration Capacity model version 5 (VIC-5): infrastructure
+#' improvements for new applications and reproducibility, Geosci. Model Dev., 11,
+#' 3481-3496, <doi:10.5194/gmd-11-3481-2018>.
+#'
+#' Liang, X., Lettenmaier, D. P., Wood, E. F., and Burges, S. J. (1994), A
 #' simple hydrologically based model of land surface water and energy
 #' fluxes for general circulation models, J. Geophys. Res., 99(D7),
-#' 14415-14428, doi:10.1029/94JD00483.
+#' 14415-14428, <doi:10.1029/94JD00483>.
 #'
-#' Liang, X., and Z. Xie, 2001: A new surface runoff parameterization
+#' Liang, X., and Xie, Z., 2001: A new surface runoff parameterization
 #' with subgrid-scale soil heterogeneity for land surface models,
 #' Advances in Water Resources, 24(9-10), 1173-1193.
 #'
-#' Rodell, M., P.R. Houser, U. Jambor, J. Gottschalck, K. Mitchell,
-#' C.-J. Meng, K. Arsenault, B. Cosgrove, J. Radakovich, M. Bosilovich,
-#' J.K. Entin, J.P. Walker, D. Lohmann, and D. Toll, The Global Land Data
-#' Assimilation System, Bull. Amer. Meteor. Soc., 85(3), 381-394, 2004
+#' Rodell, M., Houser, P.R., Jambor, U., Gottschalck, J., Mitchell, K.,
+#' Meng, C.-J., Arsenault, K., Cosgrove, B., Radakovich, J., Bosilovich, M.,
+#' Entin, J.K., Walker, J.P., Lohmann, D., and Toll, D. (2004), The Global
+#' Land Data Assimilation System, Bull. Amer. Meteor. Soc., 85(3), 381-394.
 #'
 #' @examples
 #' # This is a sample data to run VIC.

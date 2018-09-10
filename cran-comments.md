@@ -16,6 +16,10 @@ This is a resubmission. In this version I have:
   
   Copyright (c) 2010, Zed A. Shaw and Mongrel2 Project Contributors.
   
+* Add some relevant contributers as author marked as "ctb".
+  
+* Add some necessary references.
+
 Thanks for your review.
 
 Best regards
