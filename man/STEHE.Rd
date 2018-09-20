@@ -31,6 +31,8 @@ repeat the values of \code{veglib} according to \code{veg}.}
  of the streamflow routing model of Lohmann in the form of output table
  returned by \code{\link{vic}}, containing two output variable:
  \code{OUT_RUNOFF} and \code{OUT_BASEFLOW}.}
+ \item{streamflow_obs}{Observed streamflow series to be the reference to
+ evaluate the streamflow simulation results.}
 }}
 \source{
 \url{https://github.com/UW-Hydro/VIC_sample_data}

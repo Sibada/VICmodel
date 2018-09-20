@@ -80,7 +80,7 @@ void make_output_info(List output_infos, stream_struct **streams,
 {
   extern option_struct       options;
 
-  int                        sn;
+  size_t                     sn;
   char                       varname[MAXSTRING];
   char                       format[MAXSTRING];
   int                        type;

@@ -200,7 +200,10 @@ sf <- Lohmann_conv(STEHE$runoff_table_daily, uh)
 
 # Draw the output hydrograph
 plot(sf$daily, type = 'l')
-plot(sf$monthly, type = 'l')
+
+obs <- STEHE$streamflow_obs
+plot(obs, type = 'l')
+lines(sf$monthly, col = 'blue')
 
 }
 \references{

@@ -1,7 +1,6 @@
 
 
 
-
 #' Simulate the streamflow discharge of the VIC model outputs by the routing
 #' model of Lohmann et al.
 #'
@@ -191,7 +190,10 @@
 #'
 #' # Draw the output hydrograph
 #' plot(sf$daily, type = 'l')
-#' plot(sf$monthly, type = 'l')
+#'
+#' obs <- STEHE$streamflow_obs
+#' plot(obs, type = 'l')
+#' lines(sf$monthly, col = 'blue')
 #'
 #' @references Lohmann D, Nolte-Holube R, Raschke E, 1996. A large-scale
 #' horizontal routing model to be coupled to land surface parametrization
@@ -413,7 +415,15 @@ Lohmann_UH <- function(dir_file, soil_params, stn_x, stn_y, fract = NULL,
 #' @rdname Lohmann_UH
 #' @export
 Lohmann_conv <- function(runoff_table, uh, out_monthly = TRUE) {
-  R <- runoff_table$OUT_RUNOFF + runoff_table$OUT_BASEFLOW
+  if(is.list(runoff_table) && !is.data.frame(runoff_table)) {
+    R <- runoff_table$OUT_RUNOFF + runoff_table$OUT_BASEFLOW
+  } else if(is.data.frame(runoff_table)) {
+    R <- as.matrix(runoff_table)
+  } else {
+    if(!is.matrix(runoff_table))
+      stop("`runoff_table` should be a VIC output table (a list), data frame or matrix.")
+    R <- runoff_table
+  }
   R <- R[, uh$grid]
 
   tmpQ <- R %*% t(uh$UH)

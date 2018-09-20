@@ -8,6 +8,8 @@
  * is remove to `global.cpp` since global variables defined in head file is not
  * available in C++.
  *
+ * Macro `ERROR` is rename by `VIC_ERROR` to avoid redefine.
+ *
  * @section DESCRIPTION
  *
  * Definition header file
@@ -53,9 +55,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#ifdef __linux__
-#include <pwd.h>
-#endif
+//#include <pwd.h>
 
 #include <vic_physical_constants.h>
 #include <vic_log.h>
@@ -67,7 +67,7 @@
 #define MISSING_S    "MISSING"    /**< missing value for strings */
 #define NODATA_VH    -1        /**< missing value for veg_hist inputs */
 #define NODATA_VEG   -1        /**< flag for veg types not in grid cell */
-#define ERROR        -999      /**< Error Flag returned by subroutines */
+#define VIC_ERROR        -999      /**< Error Flag returned by subroutines */
 
 /***** Define maximum array sizes for model source code *****/
 #define MAX_LAYERS      3      /**< maximum number of soil moisture layers */

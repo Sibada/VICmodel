@@ -1,13 +1,13 @@
 Package: VICmodel
 Type: Package
 Title: The Variable Infiltration Capacity (VIC) Model
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(person("Ruida", "Zhong", email = "zrd2017@163.com", role = c("aut", "cre")),
-    person("Xiaohong", "Chen", role = c("aut", "ctb")),
+    person("Xiaohong", "Chen", email = "eescxh@mail.sysu.edu.cn", role = c("aut", "ctb")),
+    person("Zhaoli", "Wang", email = "wangzhl@scut.edu.cn", role = c("aut", "ctb")),
+    person("Chengguang", "Lai", "laichg@scut.edu.cn", role = c("aut", "ctb")),
     person("Joseph J", "Hamman", role = c("ctb"), comment = "Contributor and maintainer of VIC source code"),
-    person("Keith", "Cherkauer", role = c("ctb"),
-    comment = "Contributer of codes of src/vic/vic_run/src/write_vegvar.c and 
-    src/vic/drivers/shared_all/src/cmd_proc.c")
+    person("Keith", "Cherkauer", role = c("ctb"))
     )
 Description: The Variable Infiltration Capacity (VIC) model is a macroscale
     hydrologic model that solves full water and energy balances, originally

@@ -1,4 +1,9 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong for the R package VICmodel on Sep 18th, 2018:
+ * Macro `ERROR` is rename by `VIC_ERROR` to avoid redefine.
+ *
 * @section DESCRIPTION
 *
 * Brent (1973) root finding algorithm
@@ -103,18 +108,18 @@ root_brent(double LowerBound,
     which_err = 0;
 
     // If Function returns values of ERROR for both bounds, give up
-    if (fa == ERROR && fb == ERROR) {
+    if (fa == VIC_ERROR && fb == VIC_ERROR) {
         log_warn("lower and upper bounds %f and %f "
                  "failed to bracket the root because the given function was "
                  "not defined at either point.", a, b);
         va_end(ap);
-        return(ERROR);
+        return(VIC_ERROR);
     }
 
     // If Function returns value of ERROR for one bound but not both bounds,
     // move the offending bound until the Function returns a valid value
-    if (fa == ERROR || fb == ERROR) {
-        if (fa == ERROR) {
+    if (fa == VIC_ERROR || fb == VIC_ERROR) {
+        if (fa == VIC_ERROR) {
             which_err = -1;
             last_bad = a;
             last_good = b;
@@ -131,7 +136,7 @@ root_brent(double LowerBound,
 
         /* search for valid point via bisection */
         j = 0;
-        while (fc == ERROR && j < param.ROOT_BRENT_MAXITER) {
+        while (fc == VIC_ERROR && j < param.ROOT_BRENT_MAXITER) {
             last_bad = c;
             c = 0.5 * (last_bad + last_good);
             va_start(ap, Function);
@@ -139,7 +144,7 @@ root_brent(double LowerBound,
             j++;
         }
 
-        if (fc == ERROR) {
+        if (fc == VIC_ERROR) {
             /* if we get here, we could not find a bound for which the function
                returns a valid value */
             log_warn("the given function produced "
@@ -147,7 +152,7 @@ root_brent(double LowerBound,
                      "bracket the root between %f and %f. Driver info: %s.",
                      LowerBound, UpperBound, vic_run_ref_str);
             va_end(ap);
-            return(ERROR);
+            return(VIC_ERROR);
         }
         else {
             if (which_err == -1) {
@@ -182,7 +187,7 @@ root_brent(double LowerBound,
                 b += param.ROOT_BRENT_TSTEP;
                 va_start(ap, Function);
                 fb = Function(b, ap);
-                if (fb == ERROR) {
+                if (fb == VIC_ERROR) {
                     /* Undefined function values in both directions - give up */
                     log_warn("the given function "
                              "produced undefined values while "
@@ -190,7 +195,7 @@ root_brent(double LowerBound,
                              "between %f and %f. Driver info: %s.",
                              LowerBound, UpperBound, vic_run_ref_str);
                     va_end(ap);
-                    return(ERROR);
+                    return(VIC_ERROR);
                 }
                 last_good = a;
             }
@@ -198,14 +203,14 @@ root_brent(double LowerBound,
                 a -= param.ROOT_BRENT_TSTEP;
                 va_start(ap, Function);
                 fa = Function(a, ap);
-                if (fa == ERROR) {
+                if (fa == VIC_ERROR) {
                     /* Undefined function values in both directions - give up */
                     log_warn("the given function produced undefined "
                              "values while attempting to bracket the root "
                              "between %f and %f. Driver info: %s.",
                              LowerBound, UpperBound, vic_run_ref_str);
                     va_end(ap);
-                    return(ERROR);
+                    return(VIC_ERROR);
                 }
                 last_good = b;
             }
@@ -215,7 +220,7 @@ root_brent(double LowerBound,
             va_start(ap, Function);
             fc = Function(c, ap);
             i = 0;
-            while (fc == ERROR && i < param.ROOT_BRENT_MAXITER) {
+            while (fc == VIC_ERROR && i < param.ROOT_BRENT_MAXITER) {
                 last_bad = c;
                 c = 0.5 * (last_bad + last_good);
                 va_start(ap, Function);
@@ -223,14 +228,14 @@ root_brent(double LowerBound,
                 i++;
             }
 
-            if (fc == ERROR) {
+            if (fc == VIC_ERROR) {
                 /* if we get here, we could not find a bound for which the function returns a valid value */
                 log_warn("the given function produced undefined "
                          "values while attempting to bracket the root between "
                          "%f and %f. Driver info: %s.",
                          LowerBound, UpperBound, vic_run_ref_str);
                 va_end(ap);
-                return(ERROR);
+                return(VIC_ERROR);
             }
             else {
                 if (which_err == -1) {
@@ -252,7 +257,7 @@ root_brent(double LowerBound,
                  "bracket the root. Driver info: %s.",
                  a, b, vic_run_ref_str);
         va_end(ap);
-        return(ERROR);
+        return(VIC_ERROR);
     }
 
     // At this point, we have bracketed the root
@@ -332,11 +337,11 @@ root_brent(double LowerBound,
             fb = Function(b, ap);
 
             // Catch ERROR values returned from Function
-            if (fb == ERROR) {
+            if (fb == VIC_ERROR) {
                 log_warn("iteration %d: temperature = %.4f. Driver info: %s.",
                          i + 1, b, vic_run_ref_str);
                 va_end(ap);
-                return(ERROR);
+                return(VIC_ERROR);
             }
         }
     }
@@ -344,5 +349,5 @@ root_brent(double LowerBound,
     log_warn("too many iterations. Driver info: %s.",
              vic_run_ref_str);
     va_end(ap);
-    return(ERROR);
+    return(VIC_ERROR);
 }

@@ -1,4 +1,9 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong for the R package VICmodel on Sep 18th, 2018:
+ * Macro `ERROR` is rename by `VIC_ERROR` to avoid redefine.
+ *
  * @section DESCRIPTION
  *
  * This set of routines handel the energy balance of lakes
@@ -247,8 +252,8 @@ solve_lake(double           snowfall,
                                              &energy_out_bottom,
                                              &new_ice_water_eq,
                                              lake->volume - lake->ice_water_eq);
-            if (ErrorFlag == ERROR) {
-                return (ERROR);
+            if (ErrorFlag == VIC_ERROR) {
+                return (VIC_ERROR);
             }
 
             /* --------------------------------------------------------------------
@@ -319,8 +324,8 @@ solve_lake(double           snowfall,
                                  &lake_energy->advection, &lake_energy->deltaCC,
                                  &lake_energy->snow_flux, &Qei, &Qhi, &Qnet_ice,
                                  &temp_refreeze_energy, &LWneti);
-            if (ErrorFlag == ERROR) {
-                return (ERROR);
+            if (ErrorFlag == VIC_ERROR) {
+                return (VIC_ERROR);
             }
 
             lake_energy->refreeze_energy += temp_refreeze_energy * fracprv;
@@ -345,8 +350,8 @@ solve_lake(double           snowfall,
                                             mixdepth, lake->hice,
                                             lake_snow->swq * CONST_RHOFW / param.LAKE_RHOSNOW,
                                             dt, &energy_out_bottom_ice);
-                if (ErrorFlag == ERROR) {
-                    return (ERROR);
+                if (ErrorFlag == VIC_ERROR) {
+                    return (VIC_ERROR);
                 }
             }
             else {
@@ -366,8 +371,8 @@ solve_lake(double           snowfall,
                                     &lake->ice_water_eq,
                                     lake->volume - new_ice_water_eq,
                                     lake->surface[0]);
-                if (ErrorFlag == ERROR) {
-                    return (ERROR);
+                if (ErrorFlag == VIC_ERROR) {
+                    return (VIC_ERROR);
                 }
             }
 
@@ -1895,12 +1900,12 @@ water_balance(lake_var_struct *lake,
     // Estimate new surface area of liquid water for recharge calculations
     volume_save = lake->volume;
     ErrorFlag = get_depth(lake_con, lake->volume - lake->ice_water_eq, &ldepth);
-    if (ErrorFlag == ERROR) {
+    if (ErrorFlag == VIC_ERROR) {
         log_err("Error calculating depth: volume = %f, depth = %e",
                 lake->volume, ldepth);
     }
     ErrorFlag = get_sarea(lake_con, ldepth, &surfacearea);
-    if (ErrorFlag == ERROR) {
+    if (ErrorFlag == VIC_ERROR) {
         log_err("Error calculating area: depth = %f, sarea = %e",
                 ldepth, surfacearea);
     }
@@ -2044,12 +2049,12 @@ water_balance(lake_var_struct *lake,
     // extract baseflow volume from the lake m^3
     // baseflow will only come from under the liquid portion of the lake
     ErrorFlag = get_depth(lake_con, lake->volume - lake->ice_water_eq, &ldepth);
-    if (ErrorFlag == ERROR) {
+    if (ErrorFlag == VIC_ERROR) {
         log_err("Error calculating depth: volume = %f, depth = %e",
                 lake->volume, ldepth);
     }
     ErrorFlag = get_sarea(lake_con, ldepth, &surfacearea);
-    if (ErrorFlag == ERROR) {
+    if (ErrorFlag == VIC_ERROR) {
         log_err("Error calculating area: depth = %f, sarea = %e",
                 ldepth, surfacearea);
     }
@@ -2064,7 +2069,7 @@ water_balance(lake_var_struct *lake,
 
     // Find new lake depth for runoff calculations
     ErrorFlag = get_depth(lake_con, lake->volume - lake->ice_water_eq, &ldepth);
-    if (ErrorFlag == ERROR) {
+    if (ErrorFlag == VIC_ERROR) {
         log_err("Error calculating depth: volume = %f, depth = %e",
                 lake->volume, ldepth);
     }
@@ -2125,7 +2130,7 @@ water_balance(lake_var_struct *lake,
     // Here, we only want depth of liquid water (below ice bottom), since surface[] array only applies to liquid water
     ErrorFlag =
         get_depth(lake_con, lake->volume - lake->ice_water_eq, &(lake->ldepth));
-    if (ErrorFlag == ERROR) {
+    if (ErrorFlag == VIC_ERROR) {
         log_err("Error calculating depth: volume = %f, depth = %e",
                 lake->volume, lake->ldepth);
     }
@@ -2212,8 +2217,8 @@ water_balance(lake_var_struct *lake,
             soil_con.organic, options.Nnode,
             options.Nlayer,
             soil_con.FS_ACTIVE);
-        if (ErrorFlag == ERROR) {
-            return (ERROR);
+        if (ErrorFlag == VIC_ERROR) {
+            return (VIC_ERROR);
         }
     }
     else if (lakefrac < 1.0) { // wetland is gone at end of time step, but existed at beginning of step

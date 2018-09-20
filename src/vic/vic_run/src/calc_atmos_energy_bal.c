@@ -1,4 +1,9 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong for the R package VICmodel on Sep 18th, 2018:
+ * Macro `ERROR` is rename by `VIC_ERROR` to avoid redefine.
+ *
  * @section DESCRIPTION
  *
  * Iteratively solve the atmospheric energy balance equation to estimate the
@@ -117,7 +122,7 @@ calc_atmos_energy_bal(double    InOverSensible,
                                                        atmos_density,
                                                        InSensible,
                                                        SensibleHeat);
-                return (ERROR);
+                return (VIC_ERROR);
             }
         }
     }
@@ -210,7 +215,7 @@ error_print_atmos_energy_bal(double  Tcanopy,
              Tcanopy, LatentHeat, NetRadiation, Ra, Tair, atmos_density,
              InSensible, *SensibleHeat);
 
-    return(ERROR);
+    return(VIC_ERROR);
 }
 
 /******************************************************************************

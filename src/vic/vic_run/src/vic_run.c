@@ -1,4 +1,9 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong for the R package VICmodel on Sep 18th, 2018:
+ * Macro `ERROR` is rename by `VIC_ERROR` to avoid redefine.
+ *
 * @section DESCRIPTION
 *
 * This subroutine controls the model core, it solves both the energy and water
@@ -219,8 +224,8 @@ vic_run(force_data_struct   *force,
                                         aero_resist, tmp_wind,
                                         displacement, ref_height,
                                         roughness);
-            if (ErrorFlag == ERROR) {
-                return (ERROR);
+            if (ErrorFlag == VIC_ERROR) {
+                return (VIC_ERROR);
             }
 
             /**************************************************
@@ -336,8 +341,8 @@ vic_run(force_data_struct   *force,
                                                sigma_slope, fetch,
                                                veg_con[iveg].CanopLayerBnd);
 
-                    if (ErrorFlag == ERROR) {
-                        return (ERROR);
+                    if (ErrorFlag == VIC_ERROR) {
+                        return (VIC_ERROR);
                     }
 
                     force->out_prec +=
@@ -439,8 +444,8 @@ vic_run(force_data_struct   *force,
         rainonly = calc_rainonly(force->air_temp[NR], force->prec[NR],
                                  param.SNOW_MAX_SNOW_TEMP,
                                  param.SNOW_MIN_RAIN_TEMP);
-        if ((int) rainonly == ERROR) {
-            return(ERROR);
+        if ((int) rainonly == VIC_ERROR) {
+            return(VIC_ERROR);
         }
 
         /**********************************************************************
@@ -462,8 +467,8 @@ vic_run(force_data_struct   *force,
                                force->density[NR], lake_var,
                                *soil_con, gp->dt, gp->wind_h, *dmy,
                                fraci);
-        if (ErrorFlag == ERROR) {
-            return (ERROR);
+        if (ErrorFlag == VIC_ERROR) {
+            return (VIC_ERROR);
         }
 
         /**********************************************************************
@@ -473,8 +478,8 @@ vic_run(force_data_struct   *force,
         ErrorFlag = water_balance(lake_var, *lake_con, gp->dt, all_vars,
                                   iveg, band, lakefrac, *soil_con,
                                   veg_con[iveg]);
-        if (ErrorFlag == ERROR) {
-            return (ERROR);
+        if (ErrorFlag == VIC_ERROR) {
+            return (VIC_ERROR);
         }
     } // end if (options.LAKES && lake_con->lake_idx >= 0)
 

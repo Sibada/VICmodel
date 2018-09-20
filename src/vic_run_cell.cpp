@@ -122,7 +122,7 @@ List vic_run_cell(List vic_options, NumericMatrix forcing,
     }
     write_data(&streams, &dmy[rec], output_tables, write_row);
 
-    if (ErrorFlag == ERROR) {
+    if (ErrorFlag == VIC_ERROR) {
       if (options.CONTINUEONERROR) {
         log_warn("ERROR: Grid cell %i failed in record %zu so the simulation "
                    "has not finished. Please check your inputs before "

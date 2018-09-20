@@ -1,4 +1,9 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong for the R package VICmodel on Sep 18th, 2018:
+ * Macro `ERROR` is rename by `VIC_ERROR` to avoid redefine.
+ *
  * @section DESCRIPTION
  *
  * This subroutine redistributes soil properties based on the thermal solutions
@@ -83,8 +88,8 @@ calc_layer_average_thermal_props(energy_bal_struct *energy,
                                                           energy->T[0],
                                                           energy->T[1],
                                                           soil_con->avg_temp);
-        if (ErrorFlag == ERROR) {
-            return (ERROR);
+        if (ErrorFlag == VIC_ERROR) {
+            return (VIC_ERROR);
         }
         ErrorFlag = estimate_layer_ice_content_quick_flux(layer,
                                                           soil_con->depth,
@@ -94,8 +99,8 @@ calc_layer_average_thermal_props(energy_bal_struct *energy,
                                                           soil_con->frost_fract,
                                                           soil_con->frost_slope,
                                                           soil_con->FS_ACTIVE);
-        if (ErrorFlag == ERROR) {
-            return (ERROR);
+        if (ErrorFlag == VIC_ERROR) {
+            return (VIC_ERROR);
         }
     }
     else {
@@ -115,8 +120,8 @@ calc_layer_average_thermal_props(energy_bal_struct *energy,
                                                soil_con->depth,
                                                Nnodes,
                                                options.Nlayer);
-        if (ErrorFlag == ERROR) {
-            return (ERROR);
+        if (ErrorFlag == VIC_ERROR) {
+            return (VIC_ERROR);
         }
         ErrorFlag = estimate_layer_ice_content(layer,
                                                tmpT,
@@ -129,8 +134,8 @@ calc_layer_average_thermal_props(energy_bal_struct *energy,
                                                Nnodes,
                                                options.Nlayer,
                                                soil_con->FS_ACTIVE);
-        if (ErrorFlag == ERROR) {
-            return (ERROR);
+        if (ErrorFlag == VIC_ERROR) {
+            return (VIC_ERROR);
         }
     }
 
@@ -181,7 +186,7 @@ solve_T_profile(double   *T,
     static double C[MAX_NODES];
     static double D[MAX_NODES];
     static double E[MAX_NODES];
-    #pragma omp threadprivate(A, B, C, D, E)
+    //#pragma omp threadprivate(A, B, C, D, E)
 
     if (FIRST_SOLN[0]) {
         if (EXP_TRANS) {
@@ -438,7 +443,7 @@ calc_soil_thermal_fluxes(int       Nnodes,
                                               gamma[j - 1], A[j], B[j], C[j],
                                               D[j],
                                               E[j]);
-                        return (ERROR);
+                        return (VIC_ERROR);
                     }
                 }
             }
@@ -496,7 +501,7 @@ calc_soil_thermal_fluxes(int       Nnodes,
                                               expt[Nnodes - 1], ice[Nnodes - 1],
                                               gamma[Nnodes - 2],
                                               A[j], B[j], C[j], D[j], E[j]);
-                        return (ERROR);
+                        return (VIC_ERROR);
                     }
                 }
             }
@@ -548,7 +553,7 @@ calc_soil_thermal_fluxes(int       Nnodes,
             }
             log_err("Cannot solve temperature profile:\n"
                     "\tToo Many Iterations in solve_T_profile");
-            return (ERROR);
+            return (VIC_ERROR);
         }
     }
 
@@ -634,7 +639,7 @@ error_print_solve_T_profile(double  T,
              "Try increasing SOIL_DT to get model to complete cell.\n"
              "Then check output for instabilities.");
 
-    return(ERROR);
+    return(VIC_ERROR);
 }
 
 /******************************************************************************
@@ -696,7 +701,7 @@ fda_heat_eqn(double T_2[],
     static double Dkappa[MAX_NODES];
     static double Bexp;
 
-    #pragma omp threadprivate(deltat, NOFLUX, EXP_TRANS, T0, moist, ice, \
+    //#pragma omp threadprivate(deltat, NOFLUX, EXP_TRANS, T0, moist, ice, \
     kappa, Cs, max_moist, bubble, expt, alpha, beta, gamma, Zsum, Dp, \
     bulk_dens_min, soil_dens_min, quartz, bulk_density, soil_density, organic, \
     depth, Nlayers, Ts, Tb, ice_new, Cs_new, kappa_new, DT, DT_down, DT_up, \

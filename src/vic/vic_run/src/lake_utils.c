@@ -1,4 +1,9 @@
 /******************************************************************************
+ * @section MODIFICATION
+ *
+ * Modification by Ruida Zhong for the R package VICmodel on Sep 18th, 2018:
+ * Macro `ERROR` is rename by `VIC_ERROR` to avoid redefine.
+ *
  * @section DESCRIPTION
  *
  * These routines compute lake dimensions.
@@ -59,7 +64,7 @@ get_sarea(lake_con_struct lake_con,
             }
         }
         if (*sarea == 0.0 && depth != 0.0) {
-            status = ERROR;
+            status = VIC_ERROR;
         }
     }
 
@@ -107,7 +112,7 @@ get_volume(lake_con_struct lake_con,
     }
 
     if (*volume == 0.0 && depth != 0.0) {
-        status = ERROR;
+        status = VIC_ERROR;
     }
 
     return status;
@@ -181,12 +186,12 @@ get_depth(lake_con_struct lake_con,
             }
         }
         if (tempvolume / lake_con.basin[0] > DBL_EPSILON) {
-            status = ERROR;
+            status = VIC_ERROR;
         }
     }
 
     if (*depth < 0.0 || (*depth == 0.0 && volume >= DBL_EPSILON)) {
-        status = ERROR;
+        status = VIC_ERROR;
     }
 
     return status;

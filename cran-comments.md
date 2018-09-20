@@ -1,28 +1,18 @@
-## Resubmission
-This is a resubmission. In this version I have:
+# VICmodel 0.1.1
 
-* Replaced the "\dontrun{}" by "\donttest{}" in the Rd files.
+* Fix some codes with bug or potential problem of the VIC source codes, including:
+  
+Comment out functions like backtrace/backtrace_symbols.
 
-* Refered the copyright holders in the inst/COPYRIGHTS, including:
-  
-  Copyright (C) 2016 The Computational Hydrology Group, Department of 
-  Civil and Environmental Engineering, University of Washington.
-  
-  Copyright (C) 2014 The Land Surface Hydrology Group, Department of
-  Civil and Environmental Engineering, University of Washington.
-  (*Note*: this is the same organization of the Computational Hydrology
-  Group, for the former renamed as the latter, therefore we only retain
-  those of Computational Hydrology Group of UW)
-  
-  Copyright (c) 2010, Zed A. Shaw and Mongrel2 Project Contributors.
-  
-* Add some relevant contributers as author marked as "ctb".
-  
-* Add some necessary references.
+Macro definition `ERROR` is renamed as `VIC_ERROR`.
 
-Thanks for your review.
+Comment out the macros that are not used in this package such as those of openmp.
 
-Best regards
+Comment out the unnecessary print functions.
+
+* Fix the data error of the `STEHE` sample data for routing model.
+
+* Add the observed streamflow data to `STEHE` sample data.
 
 ## Test environments
 * Mac OS X 10.13.3 (on travis-ci), R 3.5.0
@@ -31,18 +21,9 @@ Best regards
 
 ## R CMD check results
 
-There was 2 NOTE for ubuntu environment:
+There was 1 NOTE for ubuntu environment:
 
 * This is a new release.
-
-* checking installed package size ... NOTE
-  installed size is  5.3Mb
-  sub-directories of 1Mb or more:
-    libs   4.7Mb
-
-  This is because the VIC model is a complex model and the core has large code. 
-  That is unavoidable but have little impact for users, therefore we suggest that
-  it is not a significant problem.
 
 There was 1 NOTE for Mac OS X environment:
 

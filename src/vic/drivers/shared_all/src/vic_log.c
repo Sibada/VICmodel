@@ -4,7 +4,7 @@
  * Modification by Ruida Zhong for the R package VICmodel on Jun 23th, 2018:
  * The stdout/stderr are commented for the correct output to R terminal.
  * Some functions not used by this R package have been commented to avoid
- * warnings.
+ * errors.
  *
  * @section DESCRIPTION
  *
@@ -155,7 +155,7 @@ setup_logging(int    id,
 void
 print_trace(void)
 {
-#ifndef _WIN32
+  /*
     void  *array[50];
     size_t size;
     char **strings;
@@ -164,9 +164,9 @@ print_trace(void)
     size = backtrace(array, 50);
     strings = (char **)backtrace_symbols(array, size);
 
-    /* Note: we are ignoring the first and last stack frame
-       the first is this function, the last is the linker, neither are
-       particularly useful */
+    //Note: we are ignoring the first and last stack frame
+    //   the first is this function, the last is the linker, neither are
+    //   particularly useful
     fprintf(LOG_DEST,
             "---------------------------------------------------------------------------\n");
     fprintf(LOG_DEST, "Traceback (most recent call last):\n");
@@ -175,5 +175,5 @@ print_trace(void)
     }
 
     free(strings);
-#endif
+    */
 }

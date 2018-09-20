@@ -74,3 +74,4 @@ read_veg_classic <- function(vegfile, rootbands = 3,
 
   return(vegs)
 }
+

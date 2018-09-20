@@ -5,6 +5,8 @@
  * Fix the warnings like "too many arguments for format
  * [-Wformat-extra-args]" by replace "%zd" and "%zu" by "%d".
  *
+ * Contents in function `print_cell_data` were commented.
+ *
  * @section DESCRIPTION
  *
  * Print library.
@@ -40,6 +42,7 @@ print_cell_data(cell_data_struct *cell,
                 size_t            nlayers,
                 size_t            nfrost)
 {
+  /*
     size_t i;
 
     // Print state variables
@@ -77,6 +80,7 @@ print_cell_data(cell_data_struct *cell,
         fprintf(LOG_DEST, "\tlayer %d   :\n", i);
         print_layer_data_fluxes(&(cell->layer[i]));
     }
+   */
 }
 
 /******************************************************************************
@@ -84,13 +88,14 @@ print_cell_data(cell_data_struct *cell,
  *****************************************************************************/
 void
 print_dmy(dmy_struct *dmy)
-{
+{/*
     fprintf(LOG_DEST, "dmy:\n");
     fprintf(LOG_DEST, "\tday        : %hu\n", dmy->day);
     fprintf(LOG_DEST, "\tday_in_year: %hu\n", dmy->day_in_year);
     fprintf(LOG_DEST, "\tseconds    : %u\n", dmy->dayseconds);
     fprintf(LOG_DEST, "\tmonth      : %hu\n", dmy->month);
     fprintf(LOG_DEST, "\tyear       : %u\n", dmy->year);
+ */
 }
 
 /******************************************************************************
@@ -118,6 +123,7 @@ print_energy_bal(energy_bal_struct *eb,
                  size_t             nnodes,
                  size_t             nfronts)
 {
+  /*
     size_t i;
 
     // Print energy_bal - state variables
@@ -235,6 +241,7 @@ print_energy_bal(energy_bal_struct *eb,
     fprintf(LOG_DEST, "\tShortOverIn      : %f\n", eb->ShortOverIn);
     fprintf(LOG_DEST, "\tShortUnderIn     : %f\n", eb->ShortUnderIn);
     fprintf(LOG_DEST, "\tsnow_flux        : %f\n", eb->snow_flux);
+   */
 }
 
 /******************************************************************************
@@ -243,10 +250,12 @@ print_energy_bal(energy_bal_struct *eb,
 void
 print_force_type(force_type_struct *force_type)
 {
+  /*
     fprintf(LOG_DEST, "force_type:\n");
     fprintf(LOG_DEST, "\tSIGNED    : %d\n", force_type->SIGNED);
     fprintf(LOG_DEST, "\tSUPPLIED  : %d\n", force_type->SUPPLIED);
     fprintf(LOG_DEST, "\tmultiplier: %f\n", force_type->multiplier);
+   */
 }
 
 /******************************************************************************
@@ -255,6 +264,7 @@ print_force_type(force_type_struct *force_type)
 void
 print_global_param(global_param_struct *gp)
 {
+  /*
     size_t i;
 
     fprintf(LOG_DEST, "global_param:\n");
@@ -290,6 +300,7 @@ print_global_param(global_param_struct *gp)
     fprintf(LOG_DEST, "\tstatemonth          : %hu\n", gp->statemonth);
     fprintf(LOG_DEST, "\tstateyear           : %hu\n", gp->stateyear);
     fprintf(LOG_DEST, "\tstatesec            : %u\n", gp->statesec);
+   */
 }
 
 /******************************************************************************
@@ -299,6 +310,7 @@ void
 print_lake_con(lake_con_struct *lcon,
                size_t           nlnodes)
 {
+  /*
     size_t i;
 
     fprintf(LOG_DEST, "lake_con:\n");
@@ -328,6 +340,7 @@ print_lake_con(lake_con_struct *lcon,
     fprintf(LOG_DEST, "\twfrac    : %.4f\n", lcon->wfrac);
     fprintf(LOG_DEST, "\tdepth_in : %.4f\n", lcon->depth_in);
     fprintf(LOG_DEST, "\tlake_idx : %d\n", lcon->lake_idx);
+   */
 }
 
 /******************************************************************************
@@ -341,6 +354,7 @@ print_lake_var(lake_var_struct *lvar,
                size_t           nnodes,
                size_t           nfrost)
 {
+  /*
     size_t i;
 
     fprintf(LOG_DEST, "lake_var:\n");
@@ -397,6 +411,7 @@ print_lake_var(lake_var_struct *lvar,
     print_snow_data(&(lvar->snow));
     print_energy_bal(&(lvar->energy), nnodes, nfronts);
     print_cell_data(&(lvar->soil), nlayers, nfrost);
+   */
 }
 
 /******************************************************************************
@@ -406,6 +421,7 @@ void
 print_layer_data_states(layer_data_struct *ldata,
                         size_t             nfrost)
 {
+  /*
     size_t i;
 
     fprintf(LOG_DEST, "layer_data (states):\n");
@@ -420,15 +436,18 @@ print_layer_data_states(layer_data_struct *ldata,
     fprintf(LOG_DEST, "\tmoist: %f\n", ldata->moist);
     fprintf(LOG_DEST, "\tphi  : %f\n", ldata->phi);
     fprintf(LOG_DEST, "\tzwt  : %f\n", ldata->zwt);
+   */
 }
 
 void
 print_layer_data_fluxes(layer_data_struct *ldata)
 {
+  /*
     fprintf(LOG_DEST, "layer_data (fluxes):\n");
     fprintf(LOG_DEST, "\tesoil: %f\n", ldata->esoil);
     fprintf(LOG_DEST, "\ttransp: %f\n", ldata->transp);
     fprintf(LOG_DEST, "\tevap: %f\n", ldata->evap);
+   */
 }
 
 /******************************************************************************
@@ -437,6 +456,7 @@ print_layer_data_fluxes(layer_data_struct *ldata)
 void
 print_option(option_struct *option)
 {
+  /*
     fprintf(LOG_DEST, "option:\n");
     fprintf(LOG_DEST, "\tAboveTreelineVeg     : %d\n",
             option->AboveTreelineVeg);
@@ -528,6 +548,7 @@ print_option(option_struct *option)
     fprintf(LOG_DEST, "\tSAVE_STATE           : %s\n",
             option->SAVE_STATE ? "true" : "false");
     fprintf(LOG_DEST, "\tNoutstreams          : %d\n", option->Noutstreams);
+   */
 }
 
 /******************************************************************************
@@ -537,6 +558,7 @@ void
 print_out_data(double         **out_data,
                metadata_struct *metadata)
 {
+  /*
     size_t i;
     size_t j;
 
@@ -552,6 +574,7 @@ print_out_data(double         **out_data,
         fprintf(LOG_DEST, "\n");
     }
     fprintf(LOG_DEST, "\n");
+   */
 }
 
 /******************************************************************************
@@ -561,6 +584,7 @@ void
 print_stream(stream_struct   *stream,
              metadata_struct *metadata)
 {
+  /*
     size_t       i;
     unsigned int varid;
 
@@ -588,6 +612,7 @@ print_stream(stream_struct   *stream,
             stream->ngridcells, stream->nvars);
 
     fprintf(LOG_DEST, "\n");
+   */
 }
 
 /******************************************************************************
@@ -596,6 +621,7 @@ print_stream(stream_struct   *stream,
 void
 print_alarm(alarm_struct *alarm)
 {
+  /*
     fprintf(LOG_DEST, "alarm_struct:\n");
     fprintf(LOG_DEST, "\tcount: %u\n", alarm->count);
     fprintf(LOG_DEST, "\tfreq: %u\n", alarm->freq);
@@ -607,6 +633,7 @@ print_alarm(alarm_struct *alarm)
             alarm->is_subdaily ? "true" : "false");
 
     fprintf(LOG_DEST, "\n");
+   */
 }
 
 /******************************************************************************
@@ -616,6 +643,7 @@ void
 print_out_metadata(metadata_struct *metadata,
                    size_t           nvars)
 {
+  /*
     size_t i;
 
     fprintf(LOG_DEST, "metadata_struct: \n");
@@ -628,6 +656,7 @@ print_out_metadata(metadata_struct *metadata,
         fprintf(LOG_DEST, "\t\tnelem: %d\n", metadata[i].nelem);
     }
     fprintf(LOG_DEST, "\n");
+   */
 }
 
 /******************************************************************************
@@ -636,6 +665,7 @@ print_out_metadata(metadata_struct *metadata,
 void
 print_param_set(param_set_struct *param_set)
 {
+  /*
     size_t i;
 
     fprintf(LOG_DEST, "param_set:\n");
@@ -655,6 +685,7 @@ print_param_set(param_set_struct *param_set)
     }
     fprintf(LOG_DEST, "\tN_TYPES     : %d %d\n", param_set->N_TYPES[0],
             param_set->N_TYPES[1]);
+   */
 }
 
 /******************************************************************************
@@ -663,6 +694,7 @@ print_param_set(param_set_struct *param_set)
 void
 print_parameters(parameters_struct *param)
 {
+  /*
     fprintf(LOG_DEST, "parameters:\n");
     fprintf(LOG_DEST, "\tLAPSE_RATE: %.4f\n", param->LAPSE_RATE);
     fprintf(LOG_DEST, "\tGAUGE_HEIGHT: %.4f\n", param->GAUGE_HEIGHT);
@@ -826,6 +858,7 @@ print_parameters(parameters_struct *param)
     fprintf(LOG_DEST, "\tROOT_BRENT_TSTEP: %.4f\n", param->ROOT_BRENT_TSTEP);
     fprintf(LOG_DEST, "\tROOT_BRENT_T: %.4f\n", param->ROOT_BRENT_T);
     fprintf(LOG_DEST, "\tFROZEN_MAXITER: %d\n", param->FROZEN_MAXITER);
+   */
 }
 
 /******************************************************************************
@@ -834,6 +867,7 @@ print_parameters(parameters_struct *param)
 void
 print_save_data(save_data_struct *save)
 {
+  /*
     fprintf(LOG_DEST, "save_data:\n");
     fprintf(LOG_DEST, "\ttotal_moist_storage: %.4f\n",
             save->total_moist_storage);
@@ -841,6 +875,7 @@ print_save_data(save_data_struct *save)
     fprintf(LOG_DEST, "\tsurfstor: %.4f\n", save->surfstor);
     fprintf(LOG_DEST, "\tswe: %.4f\n", save->swe);
     fprintf(LOG_DEST, "\twdew: %.4f\n", save->wdew);
+   */
 }
 
 /******************************************************************************
@@ -849,6 +884,7 @@ print_save_data(save_data_struct *save)
 void
 print_snow_data(snow_data_struct *snow)
 {
+  /*
     // Print state variables
     fprintf(LOG_DEST, "snow_data - states:\n");
     fprintf(LOG_DEST, "\talbedo            : %f\n", snow->albedo);
@@ -890,6 +926,7 @@ print_snow_data(snow_data_struct *snow)
     fprintf(LOG_DEST, "\tsurface_flux      : %f\n", snow->surface_flux);
     fprintf(LOG_DEST, "\ttransport         : %f\n", snow->transport);
     fprintf(LOG_DEST, "\tvapor_flux        : %f\n", snow->vapor_flux);
+   */
 }
 
 /******************************************************************************
@@ -903,6 +940,7 @@ print_soil_con(soil_con_struct *scon,
                size_t           nbands,
                size_t           nzwt)
 {
+  /*
     size_t i;
     size_t j;
 
@@ -1117,6 +1155,7 @@ print_soil_con(soil_con_struct *scon,
     fprintf(LOG_DEST, "\taspect                : %f\n", scon->aspect);
     fprintf(LOG_DEST, "\tehoriz                : %f\n", scon->ehoriz);
     fprintf(LOG_DEST, "\twhoriz                : %f\n", scon->whoriz);
+ */
 }
 
 /******************************************************************************
@@ -1130,6 +1169,7 @@ print_veg_con(veg_con_struct *vcon,
               char            carbon,
               size_t          ncanopy)
 {
+  /*
     size_t i;
 
     fprintf(LOG_DEST, "veg_con:\n");
@@ -1165,6 +1205,7 @@ print_veg_con(veg_con_struct *vcon,
             fprintf(LOG_DEST, "\t%.2f", vcon->CanopLayerBnd[i]);
         }
     }
+   */
 }
 
 /******************************************************************************
@@ -1174,6 +1215,7 @@ void
 print_veg_lib(veg_lib_struct *vlib,
               char            carbon)
 {
+  /*
     size_t i;
 
     fprintf(LOG_DEST, "veg_lib:\n");
@@ -1234,6 +1276,7 @@ print_veg_lib(veg_lib_struct *vlib,
         fprintf(LOG_DEST, "\tWnpp_inhib    : %.4f\n", vlib->Wnpp_inhib);
         fprintf(LOG_DEST, "\tNPPfactor_sat : %.4f\n", vlib->NPPfactor_sat);
     }
+   */
 }
 
 /******************************************************************************
@@ -1243,6 +1286,7 @@ void
 print_veg_var(veg_var_struct *vvar,
               size_t          ncanopy)
 {
+  /*
     extern option_struct options;
 
     size_t               i;
@@ -1304,4 +1348,5 @@ print_veg_var(veg_var_struct *vvar,
         fprintf(LOG_DEST, "\tRmaint       : %f\n", vvar->Rmaint);
         fprintf(LOG_DEST, "\tRphoto       : %f\n", vvar->Rphoto);
     }
+   */
 }
