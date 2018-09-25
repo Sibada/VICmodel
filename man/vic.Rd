@@ -78,6 +78,13 @@ and vegetation (optional) forcing data and land surface parameters (soil,
 vegetation, snowband (optional), lake (optional)).
 }
 \details{
+Function \code{vic} is used to run the VIC model in a "classic" style
+(Run the model gridcell by gridcell). Meteorological forcing data,
+soil parameters and vegetation parameters are the basic necessary inputs
+for the VIC model.
+}
+\section{Forcing data}{
+
 Parameter \code{forcing} must be a list containing several numeral matrixs
 that containing forcing data. Name of each matrix (similar to key in
 dictionary in Python) must be the specific type names including
@@ -86,8 +93,9 @@ are necessary to run the VIC model. Each row of the
 matrixs is corresponding to a time step while each column of the matrixs
 is corresponding to a gridcell, which other must be the same as those
 in soil parameter.
+}
 
-\preformatted{-------------------------------------------------------------}
+\section{Soil parameters}{
 
 Parameter \code{soil} must be a numeric data frame or matrix that containing
 soil parameters. The style of this is the same as the soil parameter file
@@ -95,8 +103,9 @@ of the classic VIC, that is, each row restores the parameter of a cell
 while each column restores one type of parameter. Detail see
 \url{http://vic.readthedocs.io/en/master/Documentation/Drivers/Classic/SoilParam/}
 in the official VIC documentation webside.
+}
 
-\preformatted{-------------------------------------------------------------}
+\section{Vegetation parameter}{
 
 Parameter \code{veg} must be a list containing several numeral matrixs that
 Those matrixs restore the vegetation parameters that are corresponding
@@ -119,8 +128,9 @@ c(veg_type, area_fract, rootzone_1_depth,
   fcan_Jan, fcan_Feb, fcan_Mar, ..., fcan_Dec,
   albedo_Jan, albedo_Feb, albedo_Mar, ..., albedo_Dec)
 }
+}
 
-\preformatted{-------------------------------------------------------------}
+\section{Output information (Optional)}{
 
 Parameter \code{output_info} is used to determine the output variables,
 output timescale (monthly, daily, sub-daily, or each 6 days, etc.),
@@ -131,7 +141,6 @@ output_info <- list(timescale = 'timescale', aggpar = aggpar,
                     outvars = c('OUT_TYPE_1', 'OUT_TYPE_2', 'OUT_TYPE_3', ...),
                     aggtypes = c('aggtype_1', 'aggtype_2', 'aggtype_3'))
 }
-
 And a output table (a list containing the output variables in matrix form)
 named "output" would be returned. You can obtain the variables use code like
 \code{res$output$OUT_...}.
@@ -174,10 +183,10 @@ out_info <- list(
             aggtypes = c('avg', 'min'))
 )
 }
-
 This would return two output tables named "wb" and "eb" respectively.
+}
 
-\preformatted{-------------------------------------------------------------}
+\section{Vegetation library (Optional)}{
 
 Parameter \code{veglib} is a matrix or a numeric dataframe of a vegetation
 parameter library. Each row determines a type of vegetation while each
@@ -186,8 +195,9 @@ month in a year, etc. If not provided, it would use the default vegetation
 library of the NASA Landsurface Data Assimination System (LDAS) (Rodell
 et al., 2004), which contains 11 types of vegetation with the vegetation
 classification of UMD.
+}
 
-\preformatted{-------------------------------------------------------------}
+\section{Snowband (elevation band) (Optional)}{
 
 Parameter \code{snowband} is a matrix or a numeric dataframe determines
 the elevation band information for each gridcells. Each row determines
@@ -210,8 +220,9 @@ each elevation band; ELEV_i is their mean elevation; PFRAC_i is there
 precipitation fraction. n is the number of elevation bands for each
 gridcell and is determined by \code{'nbands'} in the global options.
 This can be set used \code{veg_param('nbands', n)}.
+}
 
-\preformatted{-------------------------------------------------------------}
+\section{Vegetation forcing data (Optional)}{
 
 Parameter \code{forcing_veg} must be a list containing several 3D numeral
 arrays that containing vegetation forcing data such as LAI, albedo and

@@ -247,7 +247,6 @@ void write_data(stream_struct **streams, dmy_struct     *dmy,
   int    col;
   int    varid;
   NumericMatrix   data_table;
-  CharacterVector time;
 
   int hour, minute, second;
 
@@ -266,7 +265,7 @@ void write_data(stream_struct **streams, dmy_struct     *dmy,
       }
 
       // Write time
-      time = as<CharacterVector>(data_table.attr("time"));
+      CharacterVector time = as<CharacterVector>(data_table.attr("time"));
 
       second = (*streams)[sn].time_bounds[0].dayseconds;
       hour = second / 3600;

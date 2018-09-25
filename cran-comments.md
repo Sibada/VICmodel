@@ -1,6 +1,6 @@
 # VICmodel 0.1.1
 
-* Fix some codes with bug or potential problem of the VIC source codes, including:
+* Fix some codes with bug or potential problem of the VIC source codes and try to fix the issue described in https://raw.githubusercontent.com/kalibera/cran-checks/master/rchk/results/VICmodel.out, including:
   
 Comment out functions like backtrace/backtrace_symbols.
 
