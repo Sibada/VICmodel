@@ -88,11 +88,19 @@ for the VIC model.
 Parameter \code{forcing} must be a list containing several numeral matrixs
 that containing forcing data. Name of each matrix (similar to key in
 dictionary in Python) must be the specific type names including
-"PREC", "TEMP", "SW", "LW", "WIND", "VP" and "PRESS". All of those types
-are necessary to run the VIC model. Each row of the
-matrixs is corresponding to a time step while each column of the matrixs
-is corresponding to a gridcell, which other must be the same as those
-in soil parameter.
+"PREC", "TEMP", "SW", "LW", "WIND", "VP" and "PRESS", indicating precipitation
+[mm], air temperature [degree C], shortwave radiation [W], longwave radiation
+[W], wind speed [m/s], vapor pressure [kPa], and atmospheric pressure [kPa].
+All of those types are necessary to run the VIC model except "LW" and "PRESS".
+Each row of the matrixs is corresponding to a time step while each column of
+the matrixs is corresponding to a gridcell, which other must be the same as
+those in soil parameter.
+
+Longwave radiation (LW) and atmospheric pressure (PRESS) could be estimated
+via other forcing data when not supplied. Longwave radiation would be
+estimated using the Konzelmann formula (Konzelmann et al., 1996) while
+atmospheric pressure would be estimated based on the method of VIC 4.0.6,
+by assuming the sea level pressure is a constant of 101.3 kPa.
 }
 
 \section{Soil parameters}{
@@ -296,6 +304,11 @@ Hamman, J. J., Nijssen, B., Bohn, T. J., Gergel, D. R., and Mao, Y. (2018),
 The Variable Infiltration Capacity model version 5 (VIC-5): infrastructure
 improvements for new applications and reproducibility, Geosci. Model Dev., 11,
 3481-3496, <doi:10.5194/gmd-11-3481-2018>.
+
+Konzelmann, T, Van de Wal, R.S.W., Greuell, W., Bintanja, R., Henneken, E.A.C.,
+Abe-Ouchi, A., 1996. Parameterization of global and longwave incoming radiation
+for the Greenland Ice Sheet. Global Planet. Change, 9:143-164,
+<doi:10.1016/0921-8181(94)90013-2>.
 
 Liang, X., Lettenmaier, D. P., Wood, E. F., and Burges, S. J. (1994), A
 simple hydrologically based model of land surface water and energy

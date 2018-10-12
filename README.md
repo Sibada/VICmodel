@@ -29,6 +29,12 @@ require(devtools)
 devtools::install_github("Sibada/VICmodel")
 ```
 
+Or get it from the CRAN repository:
+
+```r
+install.packages("VICmodel")
+```
+
 ## References
 * Liang, X., D. P. Lettenmaier, E. F. Wood, and S. J. Burges (1994), A simple hydrologically based model of land surface water and energy fluxes for general circulation models, _J. Geophys. Res._, **99**(D7), 14415-14428, [doi:10.1029/94JD00483](http://dx.doi.org/10.1029/94JD00483).
 

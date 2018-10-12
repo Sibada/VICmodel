@@ -1,4 +1,50 @@
 
+get_J <- function() {
+  st <- c(
+    getOption('VIC_global_params')[['start_year']],
+    getOption('VIC_global_params')[['start_month']],
+    getOption('VIC_global_params')[['start_day']]
+  )
+  ed <- c(
+    getOption('VIC_global_params')[['end_year']],
+    getOption('VIC_global_params')[['end_month']],
+    getOption('VIC_global_params')[['end_day']]
+  )
+  t1 <- strptime(sprintf("%04d-%02d-%02d", st[1],st[2],st[3]),
+                           '%Y-%m-%d')
+  t2 <- strptime(sprintf("%04d-%02d-%02d", ed[1],ed[2],ed[3]),
+                           '%Y-%m-%d')
+
+  J <- as.double(format(seq(t1, t2, "day"), "%j"))
+  J <- rep(J, each = getOption('VIC_global_params')[['snow_step_per_day']])
+  J
+}
+
+cal_lw <- function(temp, vp, rsds, lat, J) {
+  # Calc s
+  lat <- lat * pi/360
+  dr <- 1 + 0.033 * cos(pi * J/182.5)
+  delta <- 0.408 * sin(pi * J/182.5 - 1.39)
+  ws <- acos(-tan(lat) * tan(delta))
+  Ra <- 0.75 * 435.023 * dr * (ws * sin(lat) * sin(delta) + cos(lat) *
+                            cos(delta) * sin(ws))
+
+  nstep <- getOption('VIC_global_params')[['snow_step_per_day']]
+  if(nstep > 1) {
+    dim(rsds) <- c(length(rsds)/nstep, nstep)
+    rsds <- rep(rowMeans(rsds), nstep)
+  }
+  s <- rsds / Ra
+
+  # Calc emissivity
+  ec <- 0.23 + 0.848* (vp/10/(temp + 273.15))**0.14286 # Konzelmann et al.
+  e <- 1-s + s*ec
+
+  # Calc longwave radiation
+
+  e*5.6696e-8* (temp + 273.15) ** 4
+}
+
 get_forclen <- function() {
   st <- c(
     getOption('VIC_global_params')[['start_year']],
@@ -130,11 +176,19 @@ deal_output_info <- function(output) {
 #' Parameter \code{forcing} must be a list containing several numeral matrixs
 #' that containing forcing data. Name of each matrix (similar to key in
 #' dictionary in Python) must be the specific type names including
-#' "PREC", "TEMP", "SW", "LW", "WIND", "VP" and "PRESS". All of those types
-#' are necessary to run the VIC model. Each row of the
-#' matrixs is corresponding to a time step while each column of the matrixs
-#' is corresponding to a gridcell, which other must be the same as those
-#' in soil parameter.
+#' "PREC", "TEMP", "SW", "LW", "WIND", "VP" and "PRESS", indicating precipitation
+#' [mm], air temperature [degree C], shortwave radiation [W], longwave radiation
+#' [W], wind speed [m/s], vapor pressure [kPa], and atmospheric pressure [kPa].
+#' All of those types are necessary to run the VIC model except "LW" and "PRESS".
+#' Each row of the matrixs is corresponding to a time step while each column of
+#' the matrixs is corresponding to a gridcell, which other must be the same as
+#' those in soil parameter.
+#'
+#' Longwave radiation (LW) and atmospheric pressure (PRESS) could be estimated
+#' via other forcing data when not supplied. Longwave radiation would be
+#' estimated using the Konzelmann formula (Konzelmann et al., 1996) while
+#' atmospheric pressure would be estimated based on the method of VIC 4.0.6,
+#' by assuming the sea level pressure is a constant of 101.3 kPa.
 #'
 #'
 #' @section Soil parameters:
@@ -311,6 +365,11 @@ deal_output_info <- function(output) {
 #' improvements for new applications and reproducibility, Geosci. Model Dev., 11,
 #' 3481-3496, <doi:10.5194/gmd-11-3481-2018>.
 #'
+#' Konzelmann, T, Van de Wal, R.S.W., Greuell, W., Bintanja, R., Henneken, E.A.C.,
+#' Abe-Ouchi, A., 1996. Parameterization of global and longwave incoming radiation
+#' for the Greenland Ice Sheet. Global Planet. Change, 9:143-164,
+#' <doi:10.1016/0921-8181(94)90013-2>.
+#'
 #' Liang, X., Lettenmaier, D. P., Wood, E. F., and Burges, S. J. (1994), A
 #' simple hydrologically based model of land surface water and energy
 #' fluxes for general circulation models, J. Geophys. Res., 99(D7),
@@ -450,7 +509,12 @@ vic <- function(forcing, soil, veg,
   }
 
   forc_types <- c("PREC", "TEMP", "SW", "LW", "PRESS", "VP", "WIND")
-  # The order should not be change.
+  # The order of forc_types must not be change.
+
+  forc_lack <- forc_types[!(forc_types %in% names(forcing))]
+  celev <- getOption('VIC_global_params')[['nlayers']]*4+10
+  if("LW" %in% forc_lack)
+    J <- get_J()
 
   if(ncell == 1) {
     forcing <- data.frame(forcing[forc_types])
@@ -475,16 +539,40 @@ vic <- function(forcing, soil, veg,
       ilake <- lake[i, ]
     }
 
-    if(is.null(snowband)) {
-      band <- -1
+    if(is.null(nrow(veg[[i]])) || ncol(veg[[i]]) <= 1){
+      iveg <- matrix(nrow = 0, ncol = 8)
     } else {
-      band <- snowband[i, ]
+      iveg <- veg[[i]]
     }
 
-    forc <- sapply(forc_types, function(ft)forcing[[ft]][, i])
+    if(is.null(snowband)) {
+      iband <- -1
+    } else {
+      iband <- snowband[i, ]
+    }
 
+    forc <- sapply(forc_types, function(ft){
+      if(ft %in% forc_lack) {
+        rep(0, minfl)
+      } else {
+        forcing[[ft]][1:minfl, i]
+      }
+    })
+
+    # Estimate forcing data that not supplied.
+    if("PRESS" %in% forc_lack) {
+      elev <- soil[i, celev]
+      forc[,5] <- 101.3*exp(-elev*9.81/(287*(273.15+forc[,2]-0.5*elev*0.0065)))
+    }
+    if("LW" %in% forc_lack) {
+      lat <- soil[i, 3]
+      forc[, 4] <- cal_lw(forc[,2], forc[,6], forc[,3], lat, J)
+      # temp, vp, rsds, lat, J
+    }
+
+    # Run for the cell.
     iout <- vic_run_cell(globalopt,
-                         forc, soil[i, ], band, veg[[i]],
+                         forc, soil[i, ], iband, iveg,
                          ilake, forc_veg, veglib, output_info)
 
     iout
